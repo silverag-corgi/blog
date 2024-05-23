@@ -1,0 +1,86 @@
+{
+  "$schema": "https://frontmatter.codes/frontmatter.schema.json",
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "ct_post",
+      "pageBundle": false,
+      "previewPath": null,
+      "fields": [
+        {
+          "title": "layout",
+          "name": "layout",
+          "type": "string",
+          "default": "post"
+        },
+        {
+          "title": "published",
+          "name": "published",
+          "type": "boolean",
+          "default": false
+        },
+        {
+          "title": "title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "title": "slug",
+          "name": "slug",
+          "type": "string",
+          "default": null
+        },
+        {
+          "title": "published at",
+          "name": "pub_at",
+          "type": "datetime",
+          "default": null,
+          "isPublishDate": true
+        },
+        {
+          "title": "updated at",
+          "name": "upd_at",
+          "type": "datetime",
+          "default": null,
+          "isModifiedDate": true
+        },
+        {
+          "title": "image",
+          "name": "image",
+          "type": "image",
+          "default": null
+        },
+        {
+          "title": "toc",
+          "name": "toc",
+          "type": "boolean",
+          "default": true
+        },
+        {
+          "title": "categories",
+          "name": "categories",
+          "type": "categories",
+          "default": []
+        },
+        {
+          "title": "tags",
+          "name": "tags",
+          "type": "tags",
+          "default": []
+        }
+      ]
+    }
+  ],
+  "frontMatter.framework.id": "jekyll",
+  "frontMatter.content.publicFolder": "docs/assets_of_posts",
+  "frontMatter.preview.host": "http://localhost:4000",
+  "frontMatter.content.pageFolders": [
+    {
+      "title": "posts",
+      "path": "[[workspace]]/docs/_posts",
+      "contentTypes": [
+        "ct_post"
+      ]
+    }
+  ],
+  "frontMatter.git.enabled": false
+}
