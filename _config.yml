@@ -1,0 +1,100 @@
+################################################################################
+# Jekyll Configuration
+# - http://jekyllrb-ja.github.io/docs/configuration/default/
+################################################################################
+
+# Site Info
+title: Rem_Blog
+description: 主にIT技術について発信しますが、雑多に発信する場所です。
+author:
+  name: Rem_
+  email: ""
+  copyright: 2021 Rem_
+  github: "silverag-corgi"
+  twitter: "silverag_corgi"
+  icon: "/assets/img/dog61_icon.jpg"
+  profile: >-
+    Webエンジニア(バックエンド)です。
+    主にIT技術について発信しますが、雑多に発信する場所です。
+
+# Dir Path
+source: ./docs
+destination: ./docs/_site
+
+# Handling Reading
+safe: false
+
+# Plugins
+plugins:
+  - jekyll-paginate-v2
+
+# Conversion
+markdown: kramdown
+kramdown:
+  parse_block_html: true
+highlighter: rouge
+excerpt_separator: "<!-- more -->"
+
+# Serving
+# url is hostname of site.
+# baseurl is subpath of site and repository name.
+url: "https://silverag-corgi.github.io"
+baseurl: "/blog"
+
+# Outputting
+permalink: "/posts/:categories/:title/"
+
+# Plugins Configuration
+
+## Pagination
+## https://github.com/sverrirs/jekyll-paginate-v2/blob/master/README-GENERATOR.md
+pagination:
+  enabled: true
+  per_page: 5
+  permalink: "/page/:num/"
+  sort_reverse: true
+  sort_field: "pub_at"
+  title: ":title - :num/:max"
+  trail:
+    before: 3
+    after: 3
+
+## Auto Generating Pages
+## https://github.com/sverrirs/jekyll-paginate-v2/blob/master/README-AUTOPAGES.md
+autopages:
+  enabled: true
+  tags:
+    enabled: true
+    layouts:
+      - "autopage-tag.html"
+    title: "タグ - :tag"
+    permalink: "/tags/:tag"
+    silent: false
+    slugify:
+      mode: "default"
+      case: false
+  categories:
+    enabled: true
+    layouts:
+      - "autopage-category.html"
+    title: "カテゴリ - :cat"
+    permalink: "/posts/:cat"
+    silent: false
+    slugify:
+      mode: "default"
+      case: false
+  collections:
+    enabled: false
+
+## Access Analytics Service
+google_analytics_key:
+
+# Original Configuration
+favicon: "/assets/img/favicon01.ico"
+rss: "/data/feed.xml"
+share:
+  twitter: true
+  line: true
+recent_posts: 5
+excerpt_chars: 130
+change_log_url: "https://github.com/silverag-corgi/blog/commits/master/"

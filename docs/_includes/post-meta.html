@@ -1,0 +1,62 @@
+{% assign pub_at = include.post-obj.pub_at %}
+{% assign upd_at = include.post-obj.upd_at %}
+{% assign path = include.post-obj.path %}
+{% assign tags = include.post-obj.tags %}
+{% assign categories = include.post-obj.categories %}
+{% assign isPostScreen = include.post-obj == page %}
+
+<div class="post-meta">
+  <ul class="post-time">
+    <li>
+      <i class="fa fa-fw fa-calendar-alt"></i>
+      <span><time datetime="{{ pub_at | date: '%Y/%m/%d %H:%M:%S' }}">{{ pub_at | date: '%Y/%m/%d %H:%M:%S' }}</time></span>
+    </li>
+
+    {% if upd_at %}
+      <li>
+        <i class="fas fa-fw fa-edit"></i>
+        <span><time datetime="{{ upd_at | date: '%Y/%m/%d %H:%M:%S' }}">{{ upd_at | date: '%Y/%m/%d %H:%M:%S' }}</time></span>
+      </li>
+    {% endif %}
+  </ul>
+
+  {% if isPostScreen %}
+    <ul class="post-log">
+      <li>
+        <i class="fas fa-fw fa-history"></i>
+        <a href="{{ site.change_log_url }}{{ path }}" target="_blank" rel="noopener">変更履歴 on GitHub</a>
+      </li>
+    </ul>
+  {% endif %}
+
+  <ul class="post-category">
+    {% for category in categories %}
+      <li>
+        <i class="fas fa-fw fa-folder"></i>
+        <a href="{{ '/posts/' | append: category | downcase | relative_url }}">
+          {{ category }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <ul class="post-tag">
+    {% for tag in tags %}
+      <li>
+        <i class="fas fa-fw fa-tag"></i>
+        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}">
+          {{ tag }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% if isPostScreen %}
+    <ul class="post-reading-time">
+      <li>
+        <i class="fas fa-fw fa-book-reader"></i>
+        {{ include.post-obj.content | strip_html | strip_newlines | replace: "	", "" | xml_escape | get_reading_time }}
+      </li>
+    </ul>
+  {% endif %}
+</div>

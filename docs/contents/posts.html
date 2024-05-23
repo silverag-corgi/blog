@@ -1,0 +1,26 @@
+---
+layout: page
+title: カテゴリ
+description: カテゴリをまとめたページ
+permalink: /posts/
+---
+
+<h1>
+  <i class="fas fa-fw fa-folder"></i>カテゴリ
+</h1>
+
+<h2>
+  <i class="fas fa-fw fa-folder"></i>カテゴリ名昇順
+</h2>
+
+<ul class="fa-ul">
+  {% assign categories = site.categories | sort_array_by_name %}
+  {% for category in categories %}
+    <li>
+      <span class="fa-li"><i class="fas fa-fw fa-folder"></i></span>
+      <a href="{{ '/posts/' | append: category[0] | downcase | relative_url }}">
+        {{ category[0] }} ({{ category[1].size }})
+      </a>
+    </li>
+  {% endfor %}
+</ul>

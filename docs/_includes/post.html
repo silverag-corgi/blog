@@ -1,0 +1,33 @@
+<div class="post">
+  <div class="post-left">
+    {% if post.image %}
+      <a class="post-image" href="{{ post.url | relative_url }}">
+        <img src="{{ post.image | relative_url }}" alt="記事ヘッダ画像">
+      </a>
+    {% else if %}
+      <a class="post-noimage" href="{{ post.url | relative_url }}">
+        <img src="{{ '/assets/img/noimg01.png' | relative_url }}" alt="記事ヘッダ画像なし">
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="post-right">
+    <h2 class="post-title">
+      <a href="{{ post.url | relative_url }}">
+        <i class="fas fa-fw fa-newspaper"></i>{{ post.title }}
+      </a>
+    </h2>
+
+    {% include post-meta.html post-obj=post %}
+
+    <div class="post-desc">
+      <p>
+        {{ post.excerpt | strip_html | strip_newlines | truncate: site.excerpt_chars }}
+      </p>
+    </div>
+
+    <div class="post-reading">
+      <a class="page-link" href="{{ post.url | relative_url }}">記事を読む</a>
+    </div>
+  </div>
+</div>

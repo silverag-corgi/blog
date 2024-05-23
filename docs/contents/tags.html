@@ -1,0 +1,42 @@
+---
+layout: page
+title: タグ
+description: タグをまとめたページ
+permalink: /tags/
+---
+
+<h1>
+  <i class="fas fa-fw fa-tag"></i>タグ
+</h1>
+
+<h2>
+  <i class="fas fa-fw fa-tag"></i>タグ名昇順
+</h2>
+
+<ul class="fa-ul">
+  {% assign tags = site.tags | sort_array_by_name %}
+  {% for tag in tags %}
+    <li>
+      <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+      <a href="{{ '/tags/' | append: tag[0] | downcase | relative_url }}">
+        {{ tag[0] }} ({{ tag[1].size }})
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+
+<h2>
+  <i class="fas fa-fw fa-tag"></i>記事数降順
+</h2>
+
+<ul class="fa-ul">
+  {% assign tags = site.tags | sort_array_by_num_of_posts: "DESC" %}
+  {% for tag_ in tags %}
+    <li>
+      <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+      <a href="{{ '/tags/' | append: tag[0] | downcase | relative_url }}">
+        {{ tag_[0] }} ({{ tag_[1].size }})
+      </a>
+    </li>
+  {% endfor %}
+</ul>

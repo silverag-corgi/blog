@@ -1,0 +1,59 @@
+---
+layout: base
+---
+
+{% include page-navi.html %}
+
+<article class="post-card">
+  {% if content.size > 0 %}
+    {{ content }}
+  {% endif %}
+
+  <div class="posts">
+    {% for post in paginator.posts %}
+      {% include post.html %}
+    {% endfor %}
+  </div>
+</article>
+
+{% if paginator.total_pages > 1 %}
+  <aside class="post-navi-card">
+    <ul class="pagination">
+      {% if paginator.previous_page %}
+        <li class="page-item">
+          <a class="page-link" href="{{ paginator.previous_page_path | relative_url }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+      {% endif %}
+
+      {% if paginator.page_trail %}
+        {% for trail in paginator.page_trail %}
+          <li class="page-item {% if page.url == trail.path %}selected{% endif %}">
+            <a class="page-link" href="{{ trail.path | relative_url | replace: 'index.html', '' }}" title="{{trail.title}}">{{ trail.num }}</a>
+          </li>
+        {% endfor %}
+      {% endif %}
+
+      {% if paginator.next_page %}
+        <li class="page-item">
+          <a class="page-link" href="{{ paginator.next_page_path | relative_url }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </aside>
+{% endif %}

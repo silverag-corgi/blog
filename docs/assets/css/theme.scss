@@ -1,0 +1,736 @@
+---
+---
+
+//******************************************************************************
+// HTML構成
+//******************************************************************************
+//
+//  body
+//      header
+//          div.nav-top
+//              div.container
+//                  nav
+//      main
+//          div.container
+//              div.row
+//                  div.col-md-12
+//                      div.top-card
+//              div.row
+//                  div.col-md-9
+//                      aside.page-navi-card
+//                      article.post-card
+//                      aside.post-navi-card
+//                      aside.related-post-card
+//                  div.col-md-3
+//                      aside.profile-card
+//                      aside.recent-posts-card
+//                      aside.popular-tags-card
+//      footer
+//          div.author
+//              div.container
+//          div.nav-bottom
+//              div.container
+//                  nav
+//
+
+//******************************************************************************
+// 変数
+//******************************************************************************
+
+// 文字
+$font-family:               "Meiryo",
+                            "Yu Gothic",
+                            "Hiragino Kaku Gothic Pro",
+                            sans-serif;
+$font-size:                 16px;
+
+// 文字色
+$font-color-default:        #DDDDDD; // Light Gray
+$font-color-accent:         #FFFFFF; // White
+$font-color-link:           #75A9FF; // Light Sky Blue
+$font-color-note:           #87CEFA; // Light Sky Blue
+$font-color-warning:        #FFFF00; // Yellow
+$font-color-blockquote:     #BBBBBB; // Light Gray
+
+// 背景色(https://colorate.azurewebsites.net/ja/Color/393939#modal-analogy)
+$background-color-default:  #5B5B5B; // Dark Gray
+$background-color-header:   #393939; // Dark Gray
+$background-color-footer:   #393939; // Dark Gray
+$background-color-card:     #393939; // Dark Gray
+$background-color-data:     #404040; // Dark Gray
+
+// トップ画像
+$top-image:                 '../img/top01.png';
+
+// 画面サイズ(https://getbootstrap.jp/docs/4.5/layout/overview/)
+$mb-md-min-width:           375px; // モバイル画面 M 最小幅
+$mb-md-max-width:           424px; // モバイル画面 M 最大幅
+$mb-lg-min-width:           425px; // モバイル画面 L 最小幅
+$mb-lg-max-width:           767px; // モバイル画面 L 最大幅
+$mb-xl-min-width:           768px; // モバイル画面 XL 最小幅
+$mb-xl-max-width:           991px; // モバイル画面 XL 最大幅
+$pc-min-width:              992px; // PC画面 最小幅
+
+//******************************************************************************
+// 共通
+//******************************************************************************
+
+html {
+    font-size: $font-size;
+}
+
+body {
+    font-family: $font-family;
+    color: $font-color-default;
+    background-color: $background-color-default;
+}
+
+h1 { font-size: 2.00rem; }
+h2 { font-size: 1.50rem; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.12rem; }
+h5 { font-size: 1.00rem; }
+h6 { font-size: 1.00rem; }
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0px 0px 16px 0px;
+    border-bottom: 1px solid gray;
+}
+
+img {
+    display: block;
+    margin: 0px auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+a {
+    color: $font-color-link;
+
+    &:hover {
+        color: $font-color-link;
+    }
+}
+
+table {
+    margin: 0px auto 16px auto;
+    border-collapse: separate;
+    border-spacing: 0px;
+
+    th {
+        background-color: $background-color-data;
+        text-align: center;
+        padding: 8px 12px;
+        border: 1px solid #5E5E5E;
+    }
+
+    td {
+        background-color: $background-color-data;
+        padding: 8px;
+        border: 1px solid #5E5E5E;
+    }
+}
+
+div.scroll-table {
+    max-height: 500px;
+    width: 100%;
+    overflow: auto;
+
+    table {
+        th {
+            position: sticky;
+            top: 0px;
+            white-space: nowrap;
+
+            &:first-child {
+                left: 0px;
+                z-index: 1;
+            }
+        }
+
+        td {
+            white-space: nowrap;
+
+            &:first-child {
+                position: sticky;
+                left: 0px;
+            }
+        }
+    }
+}
+
+//******************************************************************************
+// ヘッダ
+//******************************************************************************
+
+header {
+    // ナビトップ(PC画面の上部)
+    div.nav-top {
+        background-color: $background-color-header;
+
+        nav {
+            padding: 0px !important;
+
+            a.navbar-brand {
+                color: $font-color-accent !important;
+                font-size: 2.50rem;
+                margin: 0px 0px 0px 0px;
+            }
+
+            ul.navbar-nav {
+                margin: 0px 0px 0px auto;
+
+                li.nav-item {
+                    padding: 0px 8px 0px 8px;
+
+                    a.nav-link {
+                        color: $font-color-accent !important;
+                        padding: 0px 0px 0px 0px;
+                    }
+
+                    a.nav-link:hover {
+                        text-decoration: underline;
+                    }
+
+                    input.form-control {
+                        // モバイル画面
+                        @media screen and (min-width: $mb-md-min-width) and (max-width: $mb-md-max-width) {
+                            width: 110px;
+                        }
+                        @media screen and (min-width: $mb-lg-min-width) and (max-width: $mb-lg-max-width) {
+                            width: 160px;
+                        }
+                        @media screen and (min-width: $mb-xl-min-width) and (max-width: $mb-xl-max-width) {
+                            width: 200px;
+                        }
+                        // PC画面
+                        @media screen and (min-width: $pc-min-width) {
+                            width: 200px;
+                        }
+                    }
+                }
+
+                li.nav-item.dropdown:hover {
+                    div.dropdown-menu {
+                        background-color: $background-color-header;
+                        display: block;
+
+                        a.dropdown-item {
+                            color: $font-color-accent !important;
+
+                            &:hover {
+                                background-color: $background-color-default;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//******************************************************************************
+// フッタ
+//******************************************************************************
+
+footer {
+    // 著者情報
+    div.author {
+        color: $font-color-accent;
+        background-color: $background-color-footer;
+        padding: 16px;
+        text-align: center;
+        width: 100%;
+
+        ul.social-media {
+            padding: 0px;
+            margin: 0px;
+
+            li {
+                display: inline-block;
+
+                a {
+                    width: 48px;
+                    height: 48px;
+                    display: inline-block;
+                    color: $font-color-accent;
+
+                    &:hover {
+                        color: $font-color-link;
+                    }
+                }
+            }
+        }
+    }
+
+    // ページトップ
+    div.page-top.position-fixed {
+        // モバイル画面
+        @media screen and (max-width: $mb-xl-max-width) {
+            display: none !important;
+        }
+        // PC画面
+        @media screen and (min-width: $pc-min-width) {
+
+        }
+
+        background-color: $font-color-accent;
+        box-shadow: 0px 0px 0px 0px, 0px 8px 16px rgba(0, 0, 0, 0.2);
+
+        border: 0px;
+        border-radius: 8px;
+        padding: 18px 24px 18px 24px;
+
+        cursor: pointer;
+        z-index: 10;
+
+        bottom: 16px;
+        right: 16px;
+
+        font-size: 2.00rem;
+        color: $background-color-card;
+    }
+
+    // ナビボトム(モバイル画面の下部)
+    div.nav-bottom {
+        // モバイル画面
+        @media screen and (max-width: $mb-xl-max-width) {
+
+        }
+        // PC画面
+        @media screen and (min-width: $pc-min-width) {
+            display: none;
+        }
+
+        background-color: $background-color-header;
+
+        nav {
+            padding: 16px 0px 32px 0px;
+
+            ul.navbar-nav {
+                width: 100%;
+
+                li.nav-item {
+                    padding: 0px 0px 0px 0px;
+
+                    a.nav-link,
+                    div.page-top {
+                        color: $font-color-accent !important;
+                        padding: 0px 0px 0px 0px;
+
+                        svg {
+                            font-size: 2.00rem;
+                        }
+                        div {
+                            font-size: 10px;
+                            white-space: nowrap;
+                        }
+                    }
+
+                    a.nav-link:hover {
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//******************************************************************************
+// メイン
+//******************************************************************************
+
+main {
+    margin: 86px 0px 0px 0px;
+    // 16px + 70px
+    // 70pxはブログ名(navbar-brand)のフォントサイズに依存する。
+}
+
+//******************************************************************************
+// メイン．DIV．トップカード
+//******************************************************************************
+
+main div.top-card {
+    background-color: $background-color-card;
+    box-shadow: 0px 0px 0px 0px, 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border: 0px;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0px 0px 16px 0px;
+
+    div.top-image {
+        background-image: url($top-image);
+        background-position: center;
+        background-size: contain;
+        height: 200px;
+        span {
+
+        }
+    }
+}
+
+//******************************************************************************
+// メイン．アサイド．ページナビカード
+//******************************************************************************
+
+main aside.page-navi-card {
+    background-color: $background-color-card;
+    box-shadow: 0px 0px 0px 0px, 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border: 0px;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0px 0px 16px 0px;
+
+    nav {
+        padding: 0px !important;
+
+        ul.navbar-nav {
+            flex-wrap: wrap;
+
+            li.nav-item {
+                padding: 0px 8px 0px 0px;
+
+                span.nav-link,
+                a.nav-link {
+                    padding: 0px 0px 0px 0px;
+                }
+
+                a.nav-link:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}
+
+//******************************************************************************
+// メイン．記事．記事カード
+//******************************************************************************
+
+main article.post-card {
+    background-color: $background-color-card;
+    box-shadow: 0px 0px 0px 0px, 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border: 0px;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0px 0px 16px 0px;
+
+    div.posts {
+        div.post {
+            background-color: $background-color-data;
+            padding: 16px;
+            margin: 0px 0px 16px 0px;
+
+            div.post-left {
+                a.post-image,
+                a.post-noimage {
+                    img {
+                        object-fit: contain;
+
+                        border-radius: 0px;
+                        box-shadow: none;
+                    }
+                }
+            }
+
+            div.post-right {
+                h2.post-title {
+
+                }
+                div.post-desc {
+
+                }
+                div.post-reading {
+                    a.page-link {
+                        text-align: center;
+                        color: $font-color-default;
+                        background-color: $background-color-default;
+                    }
+                }
+            }
+        }
+
+        // モバイル画面
+        @media screen and (max-width: $mb-xl-max-width) {
+            div.post {
+                display: inline-block;
+                width: 100%;
+
+                div.post-left {
+                    width: 100%;
+                    margin: 0px 0px 16px 0px;
+
+                    a.post-image,
+                    a.post-noimage {
+                        img {
+                            height: 200px;
+                        }
+                    }
+                }
+
+                div.post-right {
+                    width: 100%;
+                }
+            }
+        }
+
+        // PC画面
+        @media screen and (min-width: $pc-min-width) {
+            div.post {
+                display: flex;
+
+                div.post-left {
+                    width: 40%;
+                    margin: 0px 16px 0px 0px;
+
+                    a.post-image,
+                    a.post-noimage {
+                        img {
+                            height: 100%;
+                        }
+                    }
+                }
+
+                div.post-right {
+                    width: 60%;
+                }
+            }
+        }
+    }
+
+    div.post-meta {
+        margin: 0px 0px 16px 0px;
+        border-bottom: 1px dotted gray;
+
+        ul.post-time,
+        ul.post-log,
+        ul.post-category,
+        ul.post-tag,
+        ul.post-reading-time {
+            margin: 0px;
+            padding: 0px;
+
+            li {
+                display: inline-block;
+                padding: 0px 8px 0px 0px;
+            }
+        }
+
+        ul.post-category {
+            li:not(:first-child) {
+                svg.fa-folder {
+                    display: none;
+                }
+            }
+        }
+
+        ul.post-tag {
+            li:not(:first-child) {
+                svg.fa-tag {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    p.post-header-image {
+        img {
+            max-height: 600px;
+        }
+    }
+
+    div.post-content {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin: 32px 0px 16px 0px;
+        }
+
+        p.post-content-image {
+            img {
+                max-height: 600px;
+            }
+        }
+    }
+
+    input.accordion-checkbox {
+        display: none;
+
+        &:checked + label.accordion-label + .accordion-content {
+            display: block;
+        }
+    }
+
+    label.accordion-label {
+        cursor: pointer;
+        color: $font-color-link;
+        margin: 0px 0px 0px 0px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    *.accordion-content {
+        display: none;
+    }
+
+    p.user-image {
+        img {
+            max-height: 200px;
+            max-width: 200px;
+        }
+    }
+}
+
+//******************************************************************************
+// メイン．アサイド．記事ナビカード
+//******************************************************************************
+
+main aside.post-navi-card {
+    background-color: $background-color-card;
+    box-shadow: 0px 0px 0px 0px, 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border: 0px;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0px 0px 16px 0px;
+
+    ul.pagination {
+        margin: 0px 0px 0px 0px;
+
+        li.page-item {
+            a.page-link {
+                color: $font-color-default;
+                background-color: $background-color-default;
+            }
+        }
+
+        li.selected {
+            a.page-link {
+                color: $background-color-default;
+                background-color: $font-color-default;
+            }
+        }
+    }
+}
+
+//******************************************************************************
+// メイン．アサイド．関連記事カード
+//******************************************************************************
+
+main aside.related-post-card {
+
+}
+
+//******************************************************************************
+// メイン．アサイド．プロフィール
+//******************************************************************************
+
+main aside.profile-card {
+    p.user-image {
+        img {
+            max-height: 200px;
+            max-width: 200px;
+        }
+    }
+}
+
+//******************************************************************************
+// メイン．アサイド．プロフィール
+// メイン．アサイド．最近の記事
+// メイン．アサイド．人気のタグ
+//******************************************************************************
+
+main aside.profile-card,
+main aside.recent-posts-card,
+main aside.popular-tags-card {
+    background-color: $background-color-card;
+    box-shadow: 0px 0px 0px 0px, 0px 8px 16px rgba(0, 0, 0, 0.2);
+    border: 0px;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 0px 0px 16px 0px;
+}
+
+//******************************************************************************
+// Font Awesome
+//******************************************************************************
+
+ul.fa-ul {
+    margin: 0px 0px 16px 24px;
+}
+
+//******************************************************************************
+// SNS共有
+//******************************************************************************
+
+div.share-bar{
+    text-align: right;
+
+    ul.share-buttons {
+        list-style: none;
+        padding: 0px;
+
+        li {
+            display: inline-block;
+
+            a {
+                text-decoration: none;
+
+                svg.fa-twitter-square {
+                    color: #1D9BF0;
+                }
+
+                svg.fa-line {
+                    color: #00C300;
+                }
+            }
+        }
+
+        li:hover {
+            transform: scale(1.5,1.5);
+        }
+    }
+}
+
+//******************************************************************************
+// 引用文
+//******************************************************************************
+
+blockquote {
+    color: $font-color-blockquote;
+    border-left: 1px solid $font-color-blockquote;
+    padding: 0px 0px 0px 16px;
+    font-style: italic;
+}
+
+//******************************************************************************
+// キー
+//******************************************************************************
+
+code.key {
+    box-shadow: 1px 0px 1px 0px #555, 0px 1px 0px 1px #888, 0px 1px 0px 1px #777;
+    border-radius: 4px;
+    margin: 1px;
+    padding: 0px 4px;
+}
+
+//******************************************************************************
+// ファイル名
+//******************************************************************************
+
+p.filename {
+    background-color: $background-color-default;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin: 0px;
+    padding: 0px 0px 0px 1.00rem;
+}

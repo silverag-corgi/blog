@@ -1,0 +1,19 @@
+<ul class="social-media">
+  {% if site.author.github %}
+    <li>
+      <a title="{{ site.author.github }} on Github" href="https://github.com/{{ site.author.github }}" target="_blank" rel="noopener"><i class="fab fa-github fa-2x"></i></a>
+    </li>
+  {% endif %}
+
+  {% if site.author.twitter %}
+    <li>
+      <a title="{{ site.author.twitter }} on Twitter" href="https://twitter.com/{{ site.author.twitter }}" target="_blank" rel="noopener"><i class="fab fa-twitter fa-2x"></i></a>
+    </li>
+  {% endif %}
+
+  {% if site.rss %}
+    <li>
+      <a title="{{ site.rss }} RSS" href="{{ site.rss | relative_url }}" target="_blank" rel="noopener"><i class="fas fa-fw fa-rss fa-2x"></i></a>
+    </li>
+  {% endif %}
+</ul>

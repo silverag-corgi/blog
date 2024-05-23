@@ -1,0 +1,44 @@
+<aside class="profile-card">
+  <h2>
+    プロフィール
+  </h2>
+  <p class="user-image">
+    <a class="nav-link" href="{{ '/about/' | relative_url }}">
+      <img src="{{ site.author.icon | relative_url }}" alt="ユーザ画像" />
+    </a>
+  </p>
+  <span>{{ site.author.profile }}</span>
+</aside>
+
+<aside class="recent-posts-card">
+  <h2>
+    最近の記事
+  </h2>
+  <ul class="fa-ul">
+    {% for post in site.posts limit:site.recent_posts %}
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="{{ post.url | relative_url }}">
+          {{ post.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</aside>
+
+<aside class="popular-tags-card">
+  <h2>
+    タグ(記事数降順)
+  </h2>
+  <ul class="fa-ul">
+    {% assign tags = site.tags | sort_array_by_num_of_posts: "DESC" %}
+    {% for tag_ in tags %}
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        <a href="{{ '/tags/' | append: tag[0] | downcase | relative_url }}">
+          {{ tag_[0] }} ({{ tag_[1].size }})
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</aside>
