@@ -71,7 +71,7 @@
     }
   ],
   "frontMatter.framework.id": "jekyll",
-  "frontMatter.content.publicFolder": "docs/assets_of_posts",
+  "frontMatter.content.publicFolder": "docs",
   "frontMatter.preview.host": "http://localhost:4000",
   "frontMatter.content.pageFolders": [
     {
