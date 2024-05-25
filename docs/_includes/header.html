@@ -9,10 +9,10 @@
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="{{ '/posts/' | downcase | relative_url }}"
+              <a class="nav-link dropdown-toggle" href="{{ '/posts/' | relative_url }}"
                 id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-fw fa-folder"></i>
-                カテゴリ
+                <span>カテゴリ</span>
               </a>
               <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
                 {% assign categories = site.categories | sort_array_by_name %}
@@ -24,10 +24,10 @@
               </div>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="{{ '/tags/' | downcase | relative_url }}"
+              <a class="nav-link dropdown-toggle" href="{{ '/tags/' | relative_url }}"
                 id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-fw fa-tag"></i>
-                タグ
+                <span>タグ</span>
               </a>
               <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
                 {% assign tags = site.tags | sort_array_by_name %}
@@ -41,7 +41,7 @@
             <li class="nav-item">
               <a class="nav-link" href="{{ '/archive/' | relative_url }}">
                 <i class="fas fa-fw fa-book"></i>
-                アーカイブ
+                <span>アーカイブ</span>
               </a>
             </li>
           </ul>
