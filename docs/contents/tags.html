@@ -31,11 +31,11 @@ permalink: /tags/
 
 <ul class="fa-ul">
   {% assign tags = site.tags | sort_array_by_num_of_posts: "DESC" %}
-  {% for tag_ in tags %}
+  {% for tag in tags %}
     <li>
       <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
       <a href="{{ '/tags/' | append: tag[0] | downcase | relative_url }}">
-        {{ tag_[0] }} ({{ tag_[1].size }})
+        {{ tag[0] }} ({{ tag[1].size }})
       </a>
     </li>
   {% endfor %}
