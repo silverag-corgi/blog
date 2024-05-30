@@ -44,7 +44,8 @@
     {% for tag in tags %}
       <li>
         <i class="fas fa-fw fa-tag"></i>
-        <a href="{{ '/tags/' | append: tag | downcase | relative_url }}">
+        {% assign replaced_tag = tag | replace_by_regexp: "(\s)", "-" %}
+        <a href="{{ '/tags/' | append: replaced_tag | downcase | relative_url }}">
           {{ tag }}
         </a>
       </li>

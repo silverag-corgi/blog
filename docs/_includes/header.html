@@ -32,7 +32,8 @@
               <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
                 {% assign tags = site.tags | sort_array_by_name %}
                 {% for tag in tags %}
-                  <a class="dropdown-item" href="{{ '/tags/' | append: tag[0] | downcase | relative_url }}">
+                  {% assign replaced_tag = tag[0] | replace_by_regexp: "(\s)", "-" %}
+                  <a class="dropdown-item" href="{{ '/tags/' | append: replaced_tag | downcase | relative_url }}">
                     {{ tag[0] }} ({{ tag[1].size }})
                   </a>
                 {% endfor %}
