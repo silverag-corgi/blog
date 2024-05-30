@@ -43,3 +43,9 @@
     {% endfor %}
   </ul>
 </aside>
+
+{% if page.toc %}
+  <aside class="toc-card">
+    {% include toc.html html=content class="toc" h_min=2 h_max=3 %}
+  </aside>
+{% endif %}

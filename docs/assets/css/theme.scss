@@ -25,6 +25,7 @@
 //                      aside.profile-card
 //                      aside.recent-posts-card
 //                      aside.popular-tags-card
+//                      aside.toc-card
 //      footer
 //          div.author
 //              div.container
@@ -645,14 +646,34 @@ main aside.profile-card {
 }
 
 //******************************************************************************
+// メイン．アサイド．目次
+//******************************************************************************
+
+main aside.toc-card {
+    font-size: 0.75rem;
+
+    // モバイル画面
+    @media screen and (max-width: $mb-xl-max-width) {
+        display: none;
+    }
+    // PC画面
+    @media screen and (min-width: $pc-min-width) {
+        position: sticky;
+        top: 86px;
+    }
+}
+
+//******************************************************************************
 // メイン．アサイド．プロフィール
 // メイン．アサイド．最近の記事
 // メイン．アサイド．人気のタグ
+// メイン．アサイド．目次
 //******************************************************************************
 
 main aside.profile-card,
 main aside.recent-posts-card,
-main aside.popular-tags-card {
+main aside.popular-tags-card,
+main aside.toc-card {
     background-color: $background-color-card;
     box-shadow: 0px 0px 0px 0px, 0px 8px 16px rgba(0, 0, 0, 0.2);
     border: 0px;
