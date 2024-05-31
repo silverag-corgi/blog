@@ -5,7 +5,7 @@
 
 # Site Info
 title: Rem_Blog
-description: 主にIT技術について発信しますが、雑多に発信する場所です。
+description: 主にIT技術について発信しますが、それ以外についても雑多に発信します
 author:
   name: Rem_
   email: ""
@@ -15,7 +15,7 @@ author:
   icon: "/assets/img/dog61_icon.jpg"
   profile: >-
     Webエンジニア(バックエンド)です。
-    主にIT技術について発信しますが、雑多に発信する場所です。
+    アイコンからわかる通り、犬が好きです。
 
 # Dir Path
 source: ./docs
