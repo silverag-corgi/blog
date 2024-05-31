@@ -7,7 +7,10 @@
       <img src="{{ site.author.icon | relative_url }}" alt="ユーザ画像" />
     </a>
   </p>
-  <span>{{ site.author.profile }}</span>
+  <p>
+    {{ site.author.profile }}
+  </p>
+  {% include social.html %}
 </aside>
 
 <aside class="recent-posts-card">
