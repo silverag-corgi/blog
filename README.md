@@ -17,3 +17,9 @@ GitHubActionsがセーフモードOFFのJekyllで静的ページを生成して`
 GitHubPagesが下記URLに公開する。
 
 - https://silverag-corgi.github.io/blog/
+
+## 備考
+
+元々は下記リポジトリで管理していたが、コミットメッセージの規約を大幅に変更したため、本リポジトリで管理することにした。
+
+- https://github.com/silverag-corgi/blog-old
