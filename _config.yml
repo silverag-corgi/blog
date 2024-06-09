@@ -86,9 +86,6 @@ autopages:
   collections:
     enabled: false
 
-## Access Analytics Service
-google_analytics_key:
-
 # Original Configuration
 favicon: "/assets/img/favicon01.ico"
 rss: "/data/feed.xml"
@@ -98,3 +95,5 @@ share:
 recent_posts: 5
 excerpt_chars: 130
 change_log_url: "https://github.com/silverag-corgi/blog/commits/main/docs/"
+google_analytics_measurement_id: "G-RJ0YRQH4CE"
+
