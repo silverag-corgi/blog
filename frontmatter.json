@@ -80,6 +80,13 @@
       "contentTypes": [
         "ct_post"
       ]
+    },
+    {
+      "title": "drafts",
+      "path": "[[workspace]]/docs/_drafts",
+      "contentTypes": [
+        "ct_post"
+      ]
     }
   ],
   "frontMatter.git.enabled": false
