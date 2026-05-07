@@ -541,6 +541,19 @@ main article.post-card {
                 max-height: 600px;
             }
         }
+
+        pre.mermaid {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+        }
+
+        pre.mermaid svg {
+            background-color: #ffffff;
+            display: block;
+            margin: 0 auto;
+        }
     }
 
     input.accordion-checkbox {
