@@ -134,6 +134,18 @@ module Jekyll
             return result
         end
 
+        # 段落内の改行を削除する
+        # Markdownの段落内改行はHTML上で半角スペースとして扱われるため、
+        # 日本語文で意図しない空白が見えないようにする
+        # Sample: {{ content | strip_newlines_in_paragraphs }}
+        def strip_newlines_in_paragraphs(content)
+            content.gsub(/<p>(.*?)<\/p>/m) do
+                inner = Regexp.last_match(1)
+                normalized = inner.gsub(/\n+/, "")
+                "<p>#{normalized}</p>"
+            end
+        end
+
     end
 end
 

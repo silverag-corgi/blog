@@ -22,7 +22,7 @@ layout: base
       {% include toc.html html=content class="toc" %}
     {% endif %}
 
-    {{ content }}
+    {{ content | strip_newlines_in_paragraphs }}
 
     {% include share.html %}
   </div>
