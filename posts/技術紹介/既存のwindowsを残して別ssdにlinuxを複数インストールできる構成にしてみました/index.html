@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>既存のWindowsを残して別SSDにLinuxを複数インストールできる構成にしてみました | Rem_Blog</title>
+
+  
+    <meta name="description" content="1. 始めに以前の記事ではWindowsからZorinに引っ越した際の初期設定や普段使うアプリケーションを紹介しました。しかし、パーティションやブートローダの設定は初心者には難しいと感じたため、紹介しませんでした。本記事では既存のWindowsを残したま...">
+  
+
+  <link href="/blog/assets/img/favicon01.ico" rel="shortcut icon">
+  <link href="/blog/data/feed.xml" rel="alternate" type="application/rss+xml">
+
+  <script src="/blog/assets/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="/blog/assets/lib/bootstrap-4.5.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/blog/assets/lib/fontawesome-free-5.15.4/js/all.min.js"></script>
+  <script src="/blog/assets/lib/lightbox2-2.11.3/js/lightbox.min.js" defer></script>
+
+  <script src="/blog/assets/lib/lunr/lunr/lunr-2.3.9.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.stemmer.support.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/tinyseg.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.ja.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.multi.js"></script>
+
+  <script src="/blog/assets/js/header.js"></script>
+  <script src="/blog/assets/js/search.js" defer></script>
+  
+    <script type="module" src="/blog/assets/js/mermaid.js"></script>
+  
+
+  <link href="/blog/assets/lib/bootstrap-4.5.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/blog/assets/css/theme.css" rel="stylesheet">
+  <link href="/blog/assets/css/syntax-github.css" rel="stylesheet">
+  <link href="/blog/assets/lib/lightbox2-2.11.3/css/lightbox.min.css" rel="stylesheet">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RJ0YRQH4CE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-RJ0YRQH4CE');
+  </script>
+
+
+</head>
+
+
+<body>
+  <header class="fixed-top">
+  <div class="nav-top">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/blog/">
+          Rem_Blog
+        </a>
+
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/blog/posts/"
+                id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>カテゴリ</span>
+              </a>
+              <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
+                
+                
+                  <a class="dropdown-item" href="/blog/posts/%E6%8A%80%E8%A1%93%E6%97%A5%E8%A8%98">
+                    技術日記 (3)
+                  </a>
+                
+                  <a class="dropdown-item" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B">
+                    技術紹介 (10)
+                  </a>
+                
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/blog/tags/"
+                id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-fw fa-tag"></i>
+                <span>タグ</span>
+              </a>
+              <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
+                
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/conventional-commits">
+                    Conventional Commits (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/git">
+                    Git (3)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/github">
+                    GitHub (4)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/githubactions">
+                    GitHubActions (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/githubpages">
+                    GitHubPages (3)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/grub">
+                    GRUB (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/jekyll">
+                    Jekyll (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/lighthouse">
+                    Lighthouse (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/linux">
+                    Linux (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/tortoisegit">
+                    TortoiseGit (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/zorin-os">
+                    Zorin OS (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88">
+                    コミット (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%86%E3%83%BC%E3%83%9E%E6%94%B9%E8%89%AF">
+                    テーマ改良 (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%83%96%E3%83%BC%E3%83%88">
+                    デュアルブート (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%96%E3%83%AD%E3%82%B0%E6%A7%8B%E7%AF%89">
+                    ブログ構築 (6)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%AA%E3%83%99%E3%83%BC%E3%82%B9">
+                    リベース (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB">
+                    変更履歴自動生成ツール (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E8%A9%95%E4%BE%A1%E3%83%84%E3%83%BC%E3%83%AB">
+                    評価ツール (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC">
+                    静的サイトジェネレーター (1)
+                  </a>
+                
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archive/">
+                <i class="fas fa-fw fa-book"></i>
+                <span>アーカイブ</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <form method="get" id="search-form" action="/blog/search/">
+              <input type="search" id="search-query" name="search-query" class="form-control" placeholder="記事検索">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="top-card">
+            <span>主にIT技術について発信しますが、それ以外についても雑多に発信します</span>
+            <div class="top-image"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-9">
+          <aside class="page-navi-card">
+  <nav class="navbar navbar-expand">
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav">
+        
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                ホーム
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/posts/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                カテゴリ
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                技術紹介
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <span class="nav-link">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                既存のwindowsを残して別ssdにlinuxを複数インストールできる構成にしてみました
+              </span>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+</aside>
+
+
+<article class="post-card">
+  <h1>
+    <i class="fas fa-fw fa-newspaper"></i>既存のWindowsを残して別SSDにLinuxを複数インストールできる構成にしてみました
+  </h1>
+
+  
+
+
+
+
+
+
+<div class="post-meta">
+  <ul class="post-time">
+    <li>
+      <i class="fa fa-fw fa-calendar-alt"></i>
+      <span><time datetime="2026/05/08 14:00:00">2026/05/08 14:00:00</time></span>
+    </li>
+
+    
+  </ul>
+
+  
+    <ul class="post-log">
+      <li>
+        <i class="fas fa-fw fa-history"></i>
+        <a href="https://github.com/silverag-corgi/blog/commits/main/docs/_posts/2026-05-08-00013.md" target="_blank" rel="noopener">変更履歴 on GitHub</a>
+      </li>
+    </ul>
+  
+
+  <ul class="post-category">
+    
+      <li>
+        <i class="fas fa-fw fa-folder"></i>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B">
+          技術紹介
+        </a>
+      </li>
+    
+  </ul>
+
+  <ul class="post-tag">
+    
+      <li>
+        <i class="fas fa-fw fa-tag"></i>
+        
+        <a href="/blog/tags/linux">
+          Linux
+        </a>
+      </li>
+    
+      <li>
+        <i class="fas fa-fw fa-tag"></i>
+        
+        <a href="/blog/tags/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%83%96%E3%83%BC%E3%83%88">
+          デュアルブート
+        </a>
+      </li>
+    
+      <li>
+        <i class="fas fa-fw fa-tag"></i>
+        
+        <a href="/blog/tags/grub">
+          GRUB
+        </a>
+      </li>
+    
+  </ul>
+
+  
+    <ul class="post-reading-time">
+      <li>
+        <i class="fas fa-fw fa-book-reader"></i>
+        約8分
+      </li>
+    </ul>
+  
+</div>
+
+
+  
+    <p class="post-header-image">
+      <img src="/blog/assets_of_posts/00013/dual_boot_overview.svg" alt="記事ヘッダ画像">
+    </p>
+  
+
+  <div class="post-content">
+    
+      <h2 id="toc">
+  目次
+</h2>
+
+<ul class="toc"><li><a href="#1-始めに">1. 始めに</a></li><li><a href="#2-想定する読者">2. 想定する読者</a></li><li><a href="#3-パーティションの設計方針と構成">3. パーティションの設計方針と構成</a></li><li><a href="#4-構築手順">4. 構築手順</a><ul><li><a href="#41-linux用ssdのパーティション作成">4.1. Linux用SSDのパーティション作成</a></li><li><a href="#42-linuxディストリビューションのインストール">4.2. Linuxディストリビューションのインストール</a></li><li><a href="#43-共用のスワップ領域の設定">4.3. 共用のスワップ領域の設定</a></li><li><a href="#44-起動順序bootorderの設定">4.4. 起動順序（BootOrder）の設定</a></li></ul></li><li><a href="#5-最後に">5. 最後に</a></li><li><a href="#6-参考url">6. 参考URL</a></li></ul>
+
+    
+
+    <h2 id="1-始めに">1. 始めに</h2>
+
+<p><a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/windows-11-%E3%81%8B%E3%82%89-zorin-os-18-1-%E3%81%AB%E5%BC%95%E3%81%A3%E8%B6%8A%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">以前の記事</a>ではWindowsからZorinに引っ越した際の初期設定や普段使うアプリケーションを紹介しました。しかし、パーティションやブートローダの設定は初心者には難しいと感じたため、紹介しませんでした。</p>
+
+<p>本記事では既存のWindowsを残したまま、別のSSDにLinuxディストリビューションを複数インストールできる構成を紹介します。なお、どの用途でパーティションを分割するか、どこにブートローダを置くかなどの設計面に重点を置きます。</p>
+
+<h2 id="2-想定する読者">2. 想定する読者</h2>
+
+<p>本記事は以下の読者を想定しています。</p>
+
+<ul>
+  <li>Windowsを残したままLinuxディストリビューションを導入したい方</li>
+  <li>Linuxディストリビューションを複数インストールしたい方</li>
+  <li>デュアルブートやブートローダの構成で迷っている方</li>
+</ul>
+
+<p>逆にLinuxを1つのみインストールする場合や、既存ディスクを初期化して入れ替える場合は、本記事の構成は不要かと思います。その一方で後から別のLinuxディストリビューションを試したくなる可能性がある場合は、最初にある程度余裕を持って設計しておくと管理しやすいと思います。</p>
+
+<h2 id="3-パーティションの設計方針と構成">3. パーティションの設計方針と構成</h2>
+
+<p>以下の設計方針に基づいて構成を考えました。</p>
+
+<ul>
+  <li>起動用の領域（EFIパーティション）はLinux用とWindows用で各々1つのみ作成して、分離する
+    <ul>
+      <li>Linuxは複数のディストリビューションで共用する</li>
+    </ul>
+  </li>
+  <li>スワップ領域（swapパーティション）はLinux用で1つのみ作成して、共用する</li>
+  <li>複数のLinuxディストリビューションをインストールできる余裕を持たせる</li>
+  <li>全てのOSを自動検出させる</li>
+</ul>
+
+<p>まずは細かい設定は抜きにして、構成の全体像をお見せします。また、一応補足しておくとUEFIはBIOSの進化版のファームウェアです。</p>
+
+<pre><code class="language-mermaid">flowchart TD
+
+  UEFI[UEFI Firmware]
+
+  subgraph WINSSD["Windows用SSD (480GB)"]
+    WEFI["Windows EFI&lt;br&gt;(Windows Boot Manager)"]
+    WIN[Windows]
+    WEFI ~~~ WIN
+  end
+
+  subgraph LNXSSD["Linux用SSD (512GB)"]
+    LEFI[Linux EFI 512MiB]
+    GRUB["GRUB (os-prober: ON)"]
+    LINUX1[Linux1 150GiB]
+    LINUX2[Linux2 150GiB]
+    SWAP[swap 8GiB]
+  end
+
+  subgraph LEGEND[凡例]
+    L1[主な流れ]
+    L1D[ ]
+    L2[参照・共用]
+    L2D[ ]
+  end
+
+  UEFI --&gt; LEFI
+  LEFI --&gt; GRUB
+  GRUB --&gt; LINUX1
+  GRUB --&gt; LINUX2
+  GRUB --&gt; WIN
+  LINUX1 -.-&gt; SWAP
+  LINUX2 -.-&gt; SWAP
+  L1 --&gt; L1D
+  L2 -.-&gt; L2D
+</code></pre>
+
+<h2 id="4-構築手順">4. 構築手順</h2>
+
+<p>既存のWindows用SSDとは別にLinux用SSDを増設しましたので、複数のLinuxディストリビューションをインストールできるように構築しました。</p>
+
+<h3 id="41-linux用ssdのパーティション作成">4.1. Linux用SSDのパーティション作成</h3>
+
+<p>GParted（ディスク管理アプリ）で以下の通りにパーティションを編集します。画面上のサイズは10進数ではなく2進数なので、MiB表記で入力してください。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>ラベル</th>
+      <th>サイズ</th>
+      <th>サイズ(MiB表記)</th>
+      <th>ファイルシステム</th>
+      <th>フラグ</th>
+      <th>備考</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Linux EFI</td>
+      <td>512MiB</td>
+      <td>512MiB</td>
+      <td>FAT32</td>
+      <td><code class="language-plaintext highlighter-rouge">boot</code>, <code class="language-plaintext highlighter-rouge">esp</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>swap</td>
+      <td>8GiB</td>
+      <td>8192MiB</td>
+      <td>linux-swap</td>
+      <td> </td>
+      <td>共用</td>
+    </tr>
+    <tr>
+      <td>Linux1</td>
+      <td>150GiB</td>
+      <td>153600MiB</td>
+      <td>ext4</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Linux2</td>
+      <td>150GiB</td>
+      <td>153600MiB</td>
+      <td>ext4</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>free</td>
+      <td>約200GiB</td>
+      <td>約204800MiB</td>
+      <td> </td>
+      <td> </td>
+      <td>未割り当て</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="42-linuxディストリビューションのインストール">4.2. Linuxディストリビューションのインストール</h3>
+
+<p>OS本体のインストール手順については画面に従って進めるだけなので詳細は割愛して、注意事項のみお伝えします。</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>設定値</th>
+      <th>備考</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>インストール先</td>
+      <td>Linux1, Linux2</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>マウントポイント</td>
+      <td><code class="language-plaintext highlighter-rouge">/</code></td>
+      <td>(1)</td>
+    </tr>
+    <tr>
+      <td>ブートローダ</td>
+      <td>Linux用SSD (例: <code class="language-plaintext highlighter-rouge">/dev/sda</code>, <code class="language-plaintext highlighter-rouge">/dev/nvme0n1</code>)</td>
+      <td>(2)</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>(1) そのパーティションをLinux上のどの場所として使うかを表す</li>
+  <li>(2) パーティションではなくディスクを指定することで、Linux用のEFIパーティション(Linux EFI)を共用する</li>
+</ul>
+
+<h3 id="43-共用のスワップ領域の設定">4.3. 共用のスワップ領域の設定</h3>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># UUID確認</span>
+<span class="nb">sudo </span>blkid
+<span class="c"># UUID追加(追加内容参照)</span>
+<span class="nb">sudo </span>vi /etc/fstab
+<span class="c"># 有効化</span>
+<span class="nb">sudo </span>swapon <span class="nt">-a</span>
+<span class="c"># 確認</span>
+swapon <span class="nt">--show</span>
+free <span class="nt">-h</span>
+</code></pre></div></div>
+
+<p>追加内容:</p>
+
+<div class="language-ini highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># /etc/fstab
+</span><span class="py">UUID</span><span class="p">=</span><span class="s">xxxx none swap sw 0 0</span>
+</code></pre></div></div>
+
+<h3 id="44-起動順序bootorderの設定">4.4. 起動順序（BootOrder）の設定</h3>
+
+<p>起動順序とブートエントリを確認して、以下の通りに設定します。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 起動順序の確認</span>
+<span class="nb">sudo </span>efibootmgr
+<span class="c"># 起動順序の設定（例）</span>
+<span class="nb">sudo </span>efibootmgr <span class="nt">-o</span> 0002,0003,0001
+</code></pre></div></div>
+
+<p>設定項目:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>設定値</th>
+      <th>設定値(例)</th>
+      <th>備考</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>BootOrder</td>
+      <td>ブート番号リスト</td>
+      <td><code class="language-plaintext highlighter-rouge">0002,0003,0001</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>BootNNNN (例: Boot0001)</td>
+      <td>Windows EFI</td>
+      <td><code class="language-plaintext highlighter-rouge">Windows Boot Manager</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>BootNNNN (例: Boot0002)</td>
+      <td>Linux1</td>
+      <td><code class="language-plaintext highlighter-rouge">Zorin OS</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>BootNNNN (例: Boot0003)</td>
+      <td>Linux2</td>
+      <td><code class="language-plaintext highlighter-rouge">Kubuntu</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="5-最後に">5. 最後に</h2>
+
+<p>本記事ではWindows用SSDとは別にLinux用SSDを増設し、Linuxディストリビューションを複数インストールしやすくするための設計方針と構築手順を紹介しました。今回のポイントはWindows用とLinux用でEFIパーティションを分離しつつ、Linux側ではEFIパーティションとswapパーティションを共用することです。</p>
+
+<p>この構成にしておくと、Windows環境への影響を抑えながらLinuxを追加したり入れ替えたりしやすくなります。また、ブートローダの配置先や起動順序を整理しやすいため、後から見返した時にも構成を把握しやすいです。</p>
+
+<p>Linuxディストリビューションを1つのみ試す段階では少し手間のかかる構成ですが、今後いくつかのLinuxディストリビューションを比較しながら使いたい場合、管理しやすい方法だと考えています。</p>
+
+<h2 id="6-参考url">6. 参考URL</h2>
+
+<ul>
+  <li><a href="https://blog.zorin.com/2026/04/15/zorin-os-18.1-is-released/">Zorin OS - Make your computer better.</a></li>
+</ul>
+
+
+    
+  <div class="share-bar">
+    <ul class="share-buttons">
+      
+        <li class="share-twitter">
+          <a href="https://twitter.com/intent/tweet?text=%E6%97%A2%E5%AD%98%E3%81%AEWindows%E3%82%92%E6%AE%8B%E3%81%97%E3%81%A6%E5%88%A5SSD%E3%81%ABLinux%E3%82%92%E8%A4%87%E6%95%B0%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%8D%E3%82%8B%E6%A7%8B%E6%88%90%E3%81%AB%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F+%7C+Rem_Blog%0ahttps://silverag-corgi.github.io/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E6%97%A2%E5%AD%98%E3%81%AEwindows%E3%82%92%E6%AE%8B%E3%81%97%E3%81%A6%E5%88%A5ssd%E3%81%ABlinux%E3%82%92%E8%A4%87%E6%95%B0%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%8D%E3%82%8B%E6%A7%8B%E6%88%90%E3%81%AB%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/" target="_blank" rel="noopener" title="Tweet">
+            <i class="fab fa-fw fa-2x fa-twitter-square"></i>
+          </a>
+        </li>
+      
+
+      
+        <li class="share-line">
+          <a href="https://social-plugins.line.me/lineit/share?url=https://silverag-corgi.github.io/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E6%97%A2%E5%AD%98%E3%81%AEwindows%E3%82%92%E6%AE%8B%E3%81%97%E3%81%A6%E5%88%A5ssd%E3%81%ABlinux%E3%82%92%E8%A4%87%E6%95%B0%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%8D%E3%82%8B%E6%A7%8B%E6%88%90%E3%81%AB%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/" target="_blank" rel="noopener" title="Tweet">
+            <i class="fab fa-fw fa-2x fa-line"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+  </div>
+</article>
+
+<aside class="post-navi-card">
+  <ul class="pagination justify-content-around">
+    
+      
+        <li class="page-item col-lg-6">
+          <a class="page-link" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/windows-11-%E3%81%8B%E3%82%89-zorin-os-18-1-%E3%81%AB%E5%BC%95%E3%81%A3%E8%B6%8A%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">Windows 11 から Zorin OS 18.1 に引っ越してみました</a>
+        </li>
+      
+
+      
+        <li class="page-item col-lg-6">
+        </li>
+      
+    
+  </ul>
+</aside>
+
+        </div>
+
+        <div class="col-lg-3">
+          <aside class="profile-card">
+  <h2>
+    プロフィール
+  </h2>
+  <p class="user-image">
+    <a class="nav-link" href="/blog/about/">
+      <img src="/blog/assets/img/dog61_icon.jpg" alt="ユーザ画像" />
+    </a>
+  </p>
+  <p>
+    Webエンジニア(バックエンド)です。 アイコンからわかる通り、犬が好きです。
+  </p>
+  <ul class="social-media">
+  
+    <li>
+      <a title="silverag-corgi on Github" href="https://github.com/silverag-corgi" target="_blank" rel="noopener"><i class="fab fa-github fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="silverag_corgi on Twitter" href="https://twitter.com/silverag_corgi" target="_blank" rel="noopener"><i class="fab fa-twitter fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="/data/feed.xml RSS" href="/blog/data/feed.xml" target="_blank" rel="noopener"><i class="fas fa-fw fa-rss fa-2x"></i></a>
+    </li>
+  
+</ul>
+
+</aside>
+
+<aside class="recent-posts-card">
+  <h2>
+    最近の記事
+  </h2>
+  <ul class="fa-ul">
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E6%97%A2%E5%AD%98%E3%81%AEwindows%E3%82%92%E6%AE%8B%E3%81%97%E3%81%A6%E5%88%A5ssd%E3%81%ABlinux%E3%82%92%E8%A4%87%E6%95%B0%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%8D%E3%82%8B%E6%A7%8B%E6%88%90%E3%81%AB%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">
+          既存のWindowsを残して別SSDにLinuxを複数インストールできる構成にしてみました
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/windows-11-%E3%81%8B%E3%82%89-zorin-os-18-1-%E3%81%AB%E5%BC%95%E3%81%A3%E8%B6%8A%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">
+          Windows 11 から Zorin OS 18.1 に引っ越してみました
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/git%E3%81%AE%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E3%81%AE%E8%A6%8F%E7%B4%84-%E7%AC%AC%EF%BC%92%E5%BC%BE/">
+          Gitのコミットメッセージの規約(第２弾)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB%E3%81%AE%E8%AA%BF%E6%9F%BB%E3%81%A8%E7%B4%B9%E4%BB%8B/">
+          変更履歴自動生成ツールの調査と紹介
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/githubstars%E4%B8%8A%E4%BD%8D5%E4%BB%B6%E3%81%AE%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%E3%81%AE%E6%83%85%E5%A0%B1%E6%95%B4%E7%90%86/">
+          GitHubStars上位5件の静的サイトジェネレーターの情報整理
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+<aside class="popular-tags-card">
+  <h2>
+    タグ(記事数降順)
+  </h2>
+  <ul class="fa-ul">
+    
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%96%E3%83%AD%E3%82%B0%E6%A7%8B%E7%AF%89">
+          ブログ構築 (6)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/github">
+          GitHub (4)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/git">
+          Git (3)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/githubpages">
+          GitHubPages (3)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/conventional-commits">
+          Conventional Commits (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/githubactions">
+          GitHubActions (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/jekyll">
+          Jekyll (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/linux">
+          Linux (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88">
+          コミット (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/grub">
+          GRUB (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/lighthouse">
+          Lighthouse (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/tortoisegit">
+          TortoiseGit (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/zorin-os">
+          Zorin OS (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%86%E3%83%BC%E3%83%9E%E6%94%B9%E8%89%AF">
+          テーマ改良 (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%83%96%E3%83%BC%E3%83%88">
+          デュアルブート (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%AA%E3%83%99%E3%83%BC%E3%82%B9">
+          リベース (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB">
+          変更履歴自動生成ツール (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E8%A9%95%E4%BE%A1%E3%83%84%E3%83%BC%E3%83%AB">
+          評価ツール (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC">
+          静的サイトジェネレーター (1)
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+  <aside class="toc-card">
+    <h2 id="toc">
+  目次
+</h2>
+
+<ul class="toc"><li><a href="#toc">
+  目次
+</a></li><li><a href="#1-始めに">1. 始めに</a></li><li><a href="#2-想定する読者">2. 想定する読者</a></li><li><a href="#3-パーティションの設計方針と構成">3. パーティションの設計方針と構成</a></li><li><a href="#4-構築手順">4. 構築手順</a><ul><li><a href="#41-linux用ssdのパーティション作成">4.1. Linux用SSDのパーティション作成</a></li><li><a href="#42-linuxディストリビューションのインストール">4.2. Linuxディストリビューションのインストール</a></li><li><a href="#43-共用のスワップ領域の設定">4.3. 共用のスワップ領域の設定</a></li><li><a href="#44-起動順序bootorderの設定">4.4. 起動順序（BootOrder）の設定</a></li></ul></li><li><a href="#5-最後に">5. 最後に</a></li><li><a href="#6-参考url">6. 参考URL</a></li></ul>
+
+  </aside>
+
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+  <div class="author">
+    <div class="container">
+      <p>&copy; 2021 Rem_</p>
+    </div>
+  </div>
+
+  <div class="page-top position-fixed">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <div class="nav-bottom fixed-bottom">
+    <div class="container">
+      <nav class="navbar navbar-expand">
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav justify-content-between">
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/">
+                <i class="fas fa-fw fa-home"></i>
+                <div>ホーム</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/posts/">
+                <i class="fas fa-fw fa-folder"></i>
+                <div>カテゴリ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="fas fa-fw fa-tag"></i>
+                <div>タグ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/archive/">
+                <i class="fas fa-fw fa-book"></i>
+                <div>アーカイブ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <div class="page-top">
+                <i class="fas fa-fw fa-arrow-up"></i>
+                <div>トップ</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</body>
+
+</html>

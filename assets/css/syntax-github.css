@@ -1,0 +1,332 @@
+/*
+ * Github Theme
+ * rougify style github
+ */
+pre {
+  color: #e6e6e6;
+  background-color: #353535;
+  padding: 1em;
+  border: 1px solid #5f5f5f;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  word-wrap: normal;
+  white-space: pre;
+  margin: 0px 0px 16px 0px;
+  overflow-x: auto;
+  /* Name.Builtin.Pseudo */
+  /* Comment */
+  /* Comment.Single */
+  /*  */
+  /*  */
+  /* Comment.Multiline */
+  /* Comment.Preproc */
+  /*  */
+  /* Comment.Special */
+  /*  */
+  /* Error */
+  /*  */
+  /* Generic.Deleted */
+  /* Generic.Emph */
+  /* Generic Heading */
+  /* Generic.Inserted */
+  /*  */
+  /*  */
+  /*  */
+  /* Generic.Strong */
+  /*  */
+  /* Generic.Subheading */
+  /* Keyword */
+  /* Keyword.Constant */
+  /* Keyword.Declaration */
+  /* Keyword.Namespace */
+  /* Keyword.Pseudo */
+  /* Keyword.Reserved */
+  /* Keyword.Type */
+  /*  */
+  /* Literal.Number */
+  /*  */
+  /* Literal.Number.Float */
+  /* Literal.Number.Hex */
+  /* Literal.Number.Integer */
+  /* Literal.Number.Integer.Long */
+  /* Literal.Number.Oct */
+  /*  */
+  /* Name.Attribute */
+  /* Name.Builtin */
+  /* Name.Class */
+  /* Name.Decorator */
+  /* Name.Exception */
+  /* Name.Function */
+  /* Name.Entity */
+  /* Name.Label */
+  /* Name.Namespace */
+  /* Name.Constant */
+  /* Name.Tag */
+  /* Name.Variable */
+  /* Operator */
+  /* Operator.Word */
+  /* Literal.String */
+  /* Literal.String.Single */
+  /* Literal.String.Double */
+  /*  */
+  /* Literal.String.Backtick */
+  /* Literal.String.Char */
+  /* Literal.String.Doc */
+  /* Literal.String.Escape */
+  /* Literal.String.Heredoc */
+  /* Literal.String.Interpol */
+  /* Literal.String.Regex */
+  /* Literal.String.Symbol */
+  /* Literal.String.Other */
+  /* Name.Variable.Class */
+  /* Name.Variable.Global */
+  /* Name.Variable.Instance */
+  /*  */
+  /* Text.Whitespace */
+}
+pre code {
+  color: inherit;
+  background-color: transparent;
+}
+pre span.bp {
+  color: #c6d8ff;
+}
+pre span.c {
+  color: #c7b98b;
+}
+pre span.c1 {
+  color: #c7b98b;
+}
+pre span.cd {
+  color: #c7b98b;
+}
+pre span.ch {
+  color: #c7b98b;
+}
+pre span.cm {
+  color: #c7b98b;
+}
+pre span.cp {
+  color: #c7b98b;
+  font-weight: bold;
+}
+pre span.cpf {
+  color: #c7b98b;
+}
+pre span.cs {
+  color: #c7b98b;
+  font-weight: bold;
+}
+pre span.dl {
+  color: #a3d977;
+}
+pre span.err {
+  color: #ffd7d7;
+  background-color: #7a1f1f;
+}
+pre span.fm {
+  color: #ffd479;
+  font-weight: bold;
+}
+pre span.gd {
+  color: #ffd7d7;
+  background-color: #5c2b2b;
+}
+pre span.ge {
+  color: #e6e6e6;
+  font-style: italic;
+}
+pre span.gh {
+  color: #bbbbbb;
+}
+pre span.gi {
+  color: #d7ffd7;
+  background-color: #214d31;
+}
+pre span.go {
+  color: #b8b8b8;
+}
+pre span.gp {
+  color: #b8b8b8;
+}
+pre span.gr {
+  color: #ff8f8f;
+}
+pre span.gs {
+  font-weight: bold;
+}
+pre span.gt {
+  color: #ff8f8f;
+}
+pre span.gu {
+  color: #bbbbbb;
+}
+pre span.k {
+  color: #ffb86c;
+  font-weight: bold;
+}
+pre span.kc {
+  color: #ffb86c;
+  font-weight: bold;
+}
+pre span.kd {
+  color: #ffb86c;
+  font-weight: bold;
+}
+pre span.kn {
+  color: #ffb86c;
+  font-weight: bold;
+}
+pre span.kp {
+  color: #ffb86c;
+  font-weight: bold;
+}
+pre span.kr {
+  color: #ffb86c;
+  font-weight: bold;
+}
+pre span.kt {
+  color: #8be9fd;
+  font-weight: bold;
+}
+pre span.kv {
+  color: #ffb86c;
+  font-weight: bold;
+}
+pre span.m {
+  color: #7dcfff;
+}
+pre span.mb {
+  color: #7dcfff;
+}
+pre span.mf {
+  color: #7dcfff;
+}
+pre span.mh {
+  color: #7dcfff;
+}
+pre span.mi {
+  color: #7dcfff;
+}
+pre span.il {
+  color: #7dcfff;
+}
+pre span.mo {
+  color: #7dcfff;
+}
+pre span.mx {
+  color: #7dcfff;
+}
+pre span.na {
+  color: #c6d8ff;
+}
+pre span.nb {
+  color: #8be9fd;
+}
+pre span.nc {
+  color: #8be9fd;
+  font-weight: bold;
+}
+pre span.nd {
+  color: #ffd479;
+  font-weight: bold;
+}
+pre span.ne {
+  color: #ffd479;
+  font-weight: bold;
+}
+pre span.nf {
+  color: #ffd479;
+  font-weight: bold;
+}
+pre span.ni {
+  color: #d2a8ff;
+}
+pre span.nl {
+  color: #ffd479;
+  font-weight: bold;
+}
+pre span.nn {
+  color: #d8d8d8;
+}
+pre span.no {
+  color: #c6d8ff;
+}
+pre span.nt {
+  color: #7dcfff;
+}
+pre span.nv {
+  color: #c6d8ff;
+}
+pre span.o {
+  color: #f0f0f0;
+  font-weight: bold;
+}
+pre span.ow {
+  color: #f0f0f0;
+  font-weight: bold;
+}
+pre span.s {
+  color: #a3d977;
+}
+pre span.s1 {
+  color: #a3d977;
+}
+pre span.s2 {
+  color: #a3d977;
+}
+pre span.sa {
+  color: #ffb86c;
+  font-weight: bold;
+}
+pre span.sb {
+  color: #a3d977;
+}
+pre span.sc {
+  color: #a3d977;
+}
+pre span.sd {
+  color: #c7b98b;
+}
+pre span.se {
+  color: #7dcfff;
+}
+pre span.sh {
+  color: #a3d977;
+}
+pre span.si {
+  color: #a3d977;
+}
+pre span.sr {
+  color: #a3d977;
+}
+pre span.ss {
+  color: #a3d977;
+}
+pre span.sx {
+  color: #a3d977;
+}
+pre span.vc {
+  color: #c6d8ff;
+}
+pre span.vg {
+  color: #c6d8ff;
+}
+pre span.vi {
+  color: #c6d8ff;
+}
+pre span.vm {
+  color: #c6d8ff;
+}
+pre span.w {
+  color: #bdbdbd;
+}
+
+code.highlighter-rouge {
+  color: #e6e6e6;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background-color: #4a4a4a;
+}
+
+/*# sourceMappingURL=syntax-github.css.map */

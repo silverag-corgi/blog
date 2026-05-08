@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>変更履歴自動生成ツールの調査と紹介 | Rem_Blog</title>
+
+  
+    <meta name="description" content="1. 初めに変更履歴(例：CHANGELOG.md)を作成する際はコミットログを見ながら手作業でまとめていましたが、当初はそこまで多くはなかったので問題はありませんでした。しかし最近少し多くなってきたため、手作業での作成だとそもそもやるのが億劫になってき...">
+  
+
+  <link href="/blog/assets/img/favicon01.ico" rel="shortcut icon">
+  <link href="/blog/data/feed.xml" rel="alternate" type="application/rss+xml">
+
+  <script src="/blog/assets/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="/blog/assets/lib/bootstrap-4.5.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/blog/assets/lib/fontawesome-free-5.15.4/js/all.min.js"></script>
+  <script src="/blog/assets/lib/lightbox2-2.11.3/js/lightbox.min.js" defer></script>
+
+  <script src="/blog/assets/lib/lunr/lunr/lunr-2.3.9.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.stemmer.support.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/tinyseg.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.ja.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.multi.js"></script>
+
+  <script src="/blog/assets/js/header.js"></script>
+  <script src="/blog/assets/js/search.js" defer></script>
+  
+
+  <link href="/blog/assets/lib/bootstrap-4.5.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/blog/assets/css/theme.css" rel="stylesheet">
+  <link href="/blog/assets/css/syntax-github.css" rel="stylesheet">
+  <link href="/blog/assets/lib/lightbox2-2.11.3/css/lightbox.min.css" rel="stylesheet">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RJ0YRQH4CE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-RJ0YRQH4CE');
+  </script>
+
+
+</head>
+
+
+<body>
+  <header class="fixed-top">
+  <div class="nav-top">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/blog/">
+          Rem_Blog
+        </a>
+
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/blog/posts/"
+                id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>カテゴリ</span>
+              </a>
+              <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
+                
+                
+                  <a class="dropdown-item" href="/blog/posts/%E6%8A%80%E8%A1%93%E6%97%A5%E8%A8%98">
+                    技術日記 (3)
+                  </a>
+                
+                  <a class="dropdown-item" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B">
+                    技術紹介 (10)
+                  </a>
+                
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/blog/tags/"
+                id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-fw fa-tag"></i>
+                <span>タグ</span>
+              </a>
+              <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
+                
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/conventional-commits">
+                    Conventional Commits (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/git">
+                    Git (3)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/github">
+                    GitHub (4)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/githubactions">
+                    GitHubActions (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/githubpages">
+                    GitHubPages (3)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/grub">
+                    GRUB (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/jekyll">
+                    Jekyll (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/lighthouse">
+                    Lighthouse (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/linux">
+                    Linux (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/tortoisegit">
+                    TortoiseGit (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/zorin-os">
+                    Zorin OS (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88">
+                    コミット (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%86%E3%83%BC%E3%83%9E%E6%94%B9%E8%89%AF">
+                    テーマ改良 (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%83%96%E3%83%BC%E3%83%88">
+                    デュアルブート (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%96%E3%83%AD%E3%82%B0%E6%A7%8B%E7%AF%89">
+                    ブログ構築 (6)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%AA%E3%83%99%E3%83%BC%E3%82%B9">
+                    リベース (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB">
+                    変更履歴自動生成ツール (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E8%A9%95%E4%BE%A1%E3%83%84%E3%83%BC%E3%83%AB">
+                    評価ツール (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC">
+                    静的サイトジェネレーター (1)
+                  </a>
+                
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archive/">
+                <i class="fas fa-fw fa-book"></i>
+                <span>アーカイブ</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <form method="get" id="search-form" action="/blog/search/">
+              <input type="search" id="search-query" name="search-query" class="form-control" placeholder="記事検索">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="top-card">
+            <span>主にIT技術について発信しますが、それ以外についても雑多に発信します</span>
+            <div class="top-image"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-9">
+          <aside class="page-navi-card">
+  <nav class="navbar navbar-expand">
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav">
+        
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                ホーム
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/posts/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                カテゴリ
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                技術紹介
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <span class="nav-link">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                変更履歴自動生成ツールの調査と紹介
+              </span>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+</aside>
+
+
+<article class="post-card">
+  <h1>
+    <i class="fas fa-fw fa-newspaper"></i>変更履歴自動生成ツールの調査と紹介
+  </h1>
+
+  
+
+
+
+
+
+
+<div class="post-meta">
+  <ul class="post-time">
+    <li>
+      <i class="fa fa-fw fa-calendar-alt"></i>
+      <span><time datetime="2024/05/30 08:00:00">2024/05/30 08:00:00</time></span>
+    </li>
+
+    
+      <li>
+        <i class="fas fa-fw fa-edit"></i>
+        <span><time datetime="2024/06/01 10:00:00">2024/06/01 10:00:00</time></span>
+      </li>
+    
+  </ul>
+
+  
+    <ul class="post-log">
+      <li>
+        <i class="fas fa-fw fa-history"></i>
+        <a href="https://github.com/silverag-corgi/blog/commits/main/docs/_posts/2023-03-29-00010.md" target="_blank" rel="noopener">変更履歴 on GitHub</a>
+      </li>
+    </ul>
+  
+
+  <ul class="post-category">
+    
+      <li>
+        <i class="fas fa-fw fa-folder"></i>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B">
+          技術紹介
+        </a>
+      </li>
+    
+  </ul>
+
+  <ul class="post-tag">
+    
+      <li>
+        <i class="fas fa-fw fa-tag"></i>
+        
+        <a href="/blog/tags/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB">
+          変更履歴自動生成ツール
+        </a>
+      </li>
+    
+      <li>
+        <i class="fas fa-fw fa-tag"></i>
+        
+        <a href="/blog/tags/conventional-commits">
+          Conventional Commits
+        </a>
+      </li>
+    
+  </ul>
+
+  
+    <ul class="post-reading-time">
+      <li>
+        <i class="fas fa-fw fa-book-reader"></i>
+        約85分
+      </li>
+    </ul>
+  
+</div>
+
+
+  
+    <p class="post-header-image">
+      <img src="/blog/assets_of_posts/00010/changelog_by_commitizen.png" alt="記事ヘッダ画像">
+    </p>
+  
+
+  <div class="post-content">
+    
+      <h2 id="toc">
+  目次
+</h2>
+
+<ul class="toc"><li><a href="#1-初めに">1. 初めに</a></li><li><a href="#2-変更履歴自動生成ツールの一覧">2. 変更履歴自動生成ツールの一覧</a></li><li><a href="#3-変更履歴自動生成ツールの動作確認">3. 変更履歴自動生成ツールの動作確認</a><ul><li><a href="#31-no04-commitizen-toolscommitizen">3.1. No.04: <code class="language-plaintext highlighter-rouge">commitizen-tools/commitizen</code></a><ul><li><a href="#311-インストール方法">3.1.1. インストール方法</a></li><li><a href="#312-ツール実行ログ">3.1.2. ツール実行ログ</a></li><li><a href="#313-ツールヘルプ">3.1.3. ツールヘルプ</a></li><li><a href="#314-ツール実行結果">3.1.4. ツール実行結果</a></li></ul></li><li><a href="#32-no05-python-semantic-releasepython-semantic-release">3.2. No.05: <code class="language-plaintext highlighter-rouge">python-semantic-release/python-semantic-release</code></a><ul><li><a href="#321-インストール方法">3.2.1. インストール方法</a></li><li><a href="#322-ツール実行ログ">3.2.2. ツール実行ログ</a></li><li><a href="#323-ツールヘルプ">3.2.3. ツールヘルプ</a></li><li><a href="#324-ツール実行結果">3.2.4. ツール実行結果</a></li></ul></li><li><a href="#33-no01-conventional-changelogconventional-changelog-cli">3.3. No.01: <code class="language-plaintext highlighter-rouge">conventional-changelog/conventional-changelog-cli</code></a><ul><li><a href="#331-インストール方法">3.3.1. インストール方法</a></li><li><a href="#332-ツール実行ログ">3.3.2. ツール実行ログ</a></li><li><a href="#333-ツールヘルプ">3.3.3. ツールヘルプ</a></li><li><a href="#334-ツール実行結果">3.3.4. ツール実行結果</a></li></ul></li></ul></li><li><a href="#4-変更履歴自動生成ツールの仕様まとめ">4. 変更履歴自動生成ツールの仕様まとめ</a></li><li><a href="#5-最後に">5. 最後に</a></li><li><a href="#6-参考url">6. 参考URL</a><ul><li><a href="#61-commit-message-guidelines-by-angular">6.1. Commit Message Guidelines by Angular</a></li><li><a href="#62-conventional-commits">6.2. Conventional Commits</a></li><li><a href="#63-github-programming-language-ranking">6.3. GitHub Programming Language Ranking</a></li><li><a href="#64-conventional-changelog-cli">6.4. conventional-changelog-cli</a></li><li><a href="#65-github-changelog-generator">6.5. github-changelog-generator</a></li></ul></li></ul>
+
+    
+
+    <h2 id="1-初めに">1. 初めに</h2>
+
+<p>変更履歴(例：<code class="language-plaintext highlighter-rouge">CHANGELOG.md</code>)を作成する際はコミットログを見ながら手作業でまとめていましたが、当初はそこまで多くはなかったので問題はありませんでした。</p>
+
+<p>しかし最近少し多くなってきたため、手作業での作成だとそもそもやるのが億劫になってきました。そこで変更履歴を自動生成できたら嬉しいなと思ってググったところ、コミットログに基づいて自動生成できるツールがありました。</p>
+
+<p>本記事では<code class="language-plaintext highlighter-rouge">Conventional Commits</code>(下記参照)と呼ばれるコミットメッセージの規約に従ったコミットログに基づいて、変更履歴を自動生成するツールを調査したので紹介します。</p>
+
+<ul>
+  <li><a href="https://www.conventionalcommits.org/ja/v1.0.0/">Conventional Commits 1.0.0 - Conventional Commits</a></li>
+</ul>
+
+<p>また、<code class="language-plaintext highlighter-rouge">Conventional Commits</code>はフロントエンドWebアプリケーションフレームワークである<code class="language-plaintext highlighter-rouge">Angular</code>の規約(下記参照)をベースにした規約です。</p>
+
+<ul>
+  <li><a href="https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines">Commit Message Guidelines by Angular</a></li>
+  <li><a href="https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines">Commit Message Guidelines by AngularJS (archived)</a></li>
+</ul>
+
+<p>なお、調査結果の詳細を読みたくない方は下記リンクへジャンプしてください。</p>
+
+<ul>
+  <li><a href="#4-変更履歴自動生成ツールの仕様まとめ">4. 変更履歴自動生成ツールの仕様まとめ</a></li>
+</ul>
+
+<h2 id="2-変更履歴自動生成ツールの一覧">2. 変更履歴自動生成ツールの一覧</h2>
+
+<p>まずは<code class="language-plaintext highlighter-rouge">Conventional Commits</code>(下記参照)で紹介されており、開発言語TOP10(下記参照)や個人的に気になっている開発言語を対象に、変更履歴自動生成の機能が提供されているツールを一覧化したいと思います。その際にGitHubリポジトリの開発言語とStar数(2023/03/29)を記載します。</p>
+
+<ul>
+  <li><a href="https://www.conventionalcommits.org/en/about/">About - Conventional Commits</a></li>
+  <li><a href="https://octoverse.github.com/2022/top-programming-languages#Frame%201776">The top programming languages - The State of the Octoverse</a></li>
+</ul>
+
+<div class="scroll-table">
+
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align: center">No</th>
+        <th>ツール名</th>
+        <th>開発言語</th>
+        <th style="text-align: right">Star数</th>
+        <th>URL</th>
+        <th>備考</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="text-align: center"> </td>
+        <td>(開発言語TOP10)</td>
+        <td> </td>
+        <td style="text-align: right"> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">01</td>
+        <td><code class="language-plaintext highlighter-rouge">conventional-changelog/conventional-changelog-cli</code></td>
+        <td>JavaScript</td>
+        <td style="text-align: right">6.9k</td>
+        <td><a href="https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">02</td>
+        <td><code class="language-plaintext highlighter-rouge">semantic-release/semantic-release-cli</code></td>
+        <td>JavaScript</td>
+        <td style="text-align: right">342</td>
+        <td><a href="https://github.com/semantic-release/cli">URL</a></td>
+        <td><code class="language-plaintext highlighter-rouge">semantic-release</code>のCLI版</td>
+      </tr>
+      <tr>
+        <td style="text-align: center">03</td>
+        <td><code class="language-plaintext highlighter-rouge">semantic-release/semantic-release</code></td>
+        <td>JavaScript</td>
+        <td style="text-align: right">17.6k</td>
+        <td><a href="https://github.com/semantic-release/semantic-release">URL</a></td>
+        <td><code class="language-plaintext highlighter-rouge">semantic-release-cli</code>の本体</td>
+      </tr>
+      <tr>
+        <td style="text-align: center">04</td>
+        <td><code class="language-plaintext highlighter-rouge">commitizen-tools/commitizen</code></td>
+        <td>Python</td>
+        <td style="text-align: right">1.5k</td>
+        <td><a href="https://github.com/commitizen-tools/commitizen">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">05</td>
+        <td><code class="language-plaintext highlighter-rouge">python-semantic-release/python-semantic-release</code></td>
+        <td>Python</td>
+        <td style="text-align: right">553</td>
+        <td><a href="https://github.com/python-semantic-release/python-semantic-release">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">06</td>
+        <td><code class="language-plaintext highlighter-rouge">jgoodman8/pyhist</code></td>
+        <td>Python</td>
+        <td style="text-align: right">18</td>
+        <td><a href="https://github.com/jgoodman8/pyhist">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">07</td>
+        <td><code class="language-plaintext highlighter-rouge">tomasbjerre/git-changelog-command-line</code></td>
+        <td>Java</td>
+        <td style="text-align: right">36</td>
+        <td><a href="https://github.com/tomasbjerre/git-changelog-command-line">URL</a></td>
+        <td><code class="language-plaintext highlighter-rouge">git-changelog-lib</code>のCLI版</td>
+      </tr>
+      <tr>
+        <td style="text-align: center">08</td>
+        <td><code class="language-plaintext highlighter-rouge">tomasbjerre/git-changelog-lib</code></td>
+        <td>Java</td>
+        <td style="text-align: right">172</td>
+        <td><a href="https://github.com/tomasbjerre/git-changelog-lib">URL</a></td>
+        <td><code class="language-plaintext highlighter-rouge">git-changelog-command-line</code>の本体</td>
+      </tr>
+      <tr>
+        <td style="text-align: center">09</td>
+        <td><code class="language-plaintext highlighter-rouge">marcocesarato/php-conventional-changelog</code></td>
+        <td>PHP</td>
+        <td style="text-align: right">168</td>
+        <td><a href="https://github.com/marcocesarato/php-conventional-changelog">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">10</td>
+        <td><code class="language-plaintext highlighter-rouge">adamtabrams/change</code></td>
+        <td>Shell</td>
+        <td style="text-align: right">61</td>
+        <td><a href="https://github.com/adamtabrams/change">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center"> </td>
+        <td>(個人的に気になっている開発言語)</td>
+        <td> </td>
+        <td style="text-align: right"> </td>
+        <td> </td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">11</td>
+        <td><code class="language-plaintext highlighter-rouge">goreleaser/chglog</code></td>
+        <td>Go</td>
+        <td style="text-align: right">213</td>
+        <td><a href="https://github.com/goreleaser/chglog">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">12</td>
+        <td><code class="language-plaintext highlighter-rouge">leodido/go-conventionalcommits</code></td>
+        <td>Go</td>
+        <td style="text-align: right">53</td>
+        <td><a href="https://github.com/leodido/go-conventionalcommits">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">13</td>
+        <td><code class="language-plaintext highlighter-rouge">bvieira/sv4git</code></td>
+        <td>Go</td>
+        <td style="text-align: right">53</td>
+        <td><a href="https://github.com/bvieira/sv4git">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">14</td>
+        <td><code class="language-plaintext highlighter-rouge">gembaadvantage/uplift</code></td>
+        <td>Go</td>
+        <td style="text-align: right">39</td>
+        <td><a href="https://github.com/gembaadvantage/uplift">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">15</td>
+        <td><code class="language-plaintext highlighter-rouge">joselitofilho/go-conventional-commits</code></td>
+        <td>Go</td>
+        <td style="text-align: right">10</td>
+        <td><a href="https://github.com/joselitofilho/go-conventional-commits">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">16</td>
+        <td><code class="language-plaintext highlighter-rouge">PSanetra/git-semver</code></td>
+        <td>Go</td>
+        <td style="text-align: right">11</td>
+        <td><a href="https://github.com/PSanetra/git-semver">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">17</td>
+        <td><code class="language-plaintext highlighter-rouge">cocogitto/cocogitto</code></td>
+        <td>Rust</td>
+        <td style="text-align: right">355</td>
+        <td><a href="https://github.com/cocogitto/cocogitto">URL</a></td>
+        <td> </td>
+      </tr>
+      <tr>
+        <td style="text-align: center">18</td>
+        <td><code class="language-plaintext highlighter-rouge">chaaz/versio</code></td>
+        <td>Rust</td>
+        <td style="text-align: right">69</td>
+        <td><a href="https://github.com/chaaz/versio">URL</a></td>
+        <td> </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<p>Star数が伸びていないリポジトリもありますが、変更履歴を出力する機能は全てのリポジトリで実装されているみたいなので、興味のある方は採用してみても良いかもしれません。</p>
+
+<p>また余談ですが、どんなリポジトリでもドキュメントがあるのとないのでは理解するための敷居が全然違うので、ドキュメントはやはり大切ですね。</p>
+
+<h2 id="3-変更履歴自動生成ツールの動作確認">3. 変更履歴自動生成ツールの動作確認</h2>
+
+<p>次に前章で紹介したツールのサンプルを作成してみます。ただし、ツールで何ができるのかを理解することが目的のため、基本的には自身の開発環境(<code class="language-plaintext highlighter-rouge">Python 3.10</code>)に適しているツールのみを対象とします。サンプルを作成したツール以外に関してはドキュメントの確認のみ行っています。</p>
+
+<h3 id="31-no04-commitizen-toolscommitizen">3.1. No.04: <code class="language-plaintext highlighter-rouge">commitizen-tools/commitizen</code></h3>
+
+<p>1つ目のツールは、Pythonで実装されたツールです。</p>
+
+<ul>
+  <li><a href="https://github.com/commitizen-tools/commitizen">commitizen-tools/commitizen - GitHub</a></li>
+  <li><a href="https://commitizen-tools.github.io/commitizen/">Commitizen documentation</a></li>
+</ul>
+
+<h4 id="311-インストール方法">3.1.1. インストール方法</h4>
+
+<p>まずは<code class="language-plaintext highlighter-rouge">poetry</code>(パッケージ管理ツール)をインストールします。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python3 <span class="nt">--version</span>
+Python 3.10.10
+
+<span class="nv">$ </span>pipx <span class="nb">install </span>poetry
+<span class="o">(</span>省略<span class="o">)</span>
+
+<span class="nv">$ </span>poetry <span class="nt">--version</span>
+Poetry <span class="o">(</span>version 1.4.1<span class="o">)</span>
+
+<span class="nv">$ </span>poetry config virtualenvs.in-project <span class="nb">true</span>
+</code></pre></div></div>
+
+<p>次に<code class="language-plaintext highlighter-rouge">commitizen</code>をインストールします。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd </span>workspace/Git/python/changelog-sample
+
+<span class="nv">$ </span>poetry add commitizen <span class="nt">--group</span> dev
+<span class="o">(</span>省略<span class="o">)</span>
+
+<span class="nv">$ </span>poetry show commitizen
+ name         : commitizen                    
+ version      : 2.42.1                        
+ description  : Python commitizen client tool 
+
+dependencies
+ - argcomplete <span class="o">&gt;=</span>1.12.1,&lt;2.1
+ - charset-normalizer <span class="o">&gt;=</span>2.1.0,&lt;3.0.0
+ - colorama <span class="o">&gt;=</span>0.4.1,&lt;0.5.0
+ - decli <span class="o">&gt;=</span>0.5.2,&lt;0.6.0
+ - jinja2 <span class="o">&gt;=</span>2.10.3
+ - packaging <span class="o">&gt;=</span>19
+ - pyyaml <span class="o">&gt;=</span>3.08
+ - questionary <span class="o">&gt;=</span>1.4.0,&lt;2.0.0
+ - termcolor <span class="o">&gt;=</span>1.1,&lt;3
+ - tomlkit <span class="o">&gt;=</span>0.5.3,&lt;1.0.0
+ - typing-extensions <span class="o">&gt;=</span>4.0.1,&lt;5.0.0
+
+required by
+ - commitizen-cz-custom-commits ^2.42.1
+</code></pre></div></div>
+
+<h4 id="312-ツール実行ログ">3.1.2. ツール実行ログ</h4>
+
+<p>次にツールを実行する前のコミットログを確認します。これに基づいて変更履歴が自動生成されます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git log <span class="nt">--oneline</span>
+19d8b3d <span class="o">(</span>HEAD -&gt; main, origin/main, origin/HEAD<span class="o">)</span> build: create exe <span class="nb">env </span>of automatic changelog generator
+5cc9ed9 feat: update a feature <span class="k">for </span>the user <span class="c"># L3: BREAKING CHANGE: make incompatible change to existing features</span>
+3b677aa chore: <span class="k">do </span>chores excluding those mentioned above
+3b11de7 docs: add documents
+c8265c7 ci: add CI configuration files and scripts
+1aa34ef build: add the build system and external dependencies
+6a74576 <span class="nb">test</span>: add tests
+d15450e perf: improve performance
+2fb93e6 refactor: improve code <span class="o">(</span>without changing external behavior<span class="o">)</span>
+85d2dd2 style: apply a format style <span class="o">(</span>without affecting the meaning of the code<span class="o">)</span>
+4064860 fix: fix a bug <span class="k">for </span>the user
+b9131c5 feat: add a feature <span class="k">for </span>the user
+6da62b4 <span class="o">(</span>tag: v0.0.0<span class="o">)</span> Initial commit
+</code></pre></div></div>
+
+<p>次に<code class="language-plaintext highlighter-rouge">commitizen</code>を実行します。バージョンはコミットログに基づいて自動計算されます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>poetry run cz bump
+chore: bump from 0.0.0 to 1.0.0
+tag to create: v1.0.0
+increment detected: MAJOR
+
+tags <span class="k">in </span>full_changelog: <span class="o">[</span><span class="s1">'v1.0.0'</span>, <span class="s1">'v0.0.0'</span><span class="o">]</span>
+
+<span class="o">[</span>main 95a1fa6] chore: bump from 0.0.0 to 1.0.0
+ 2 files changed, 25 insertions<span class="o">(</span>+<span class="o">)</span>, 2 deletions<span class="o">(</span>-<span class="o">)</span>
+
+Done!
+</code></pre></div></div>
+
+<p>補足事項として、実行する前に<code class="language-plaintext highlighter-rouge">pyproject.toml</code>がプロジェクトルートに配置されている必要があります。</p>
+
+<details>
+  <summary>
+    <p>詳細</p>
+  </summary>
+
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat </span>pyproject.toml
+<span class="o">[</span>tool.poetry]
+name <span class="o">=</span> <span class="s2">"changelog-sample"</span>
+version <span class="o">=</span> <span class="s2">"0.0.0"</span>
+description <span class="o">=</span> <span class="s2">"changelog sample"</span>
+authors <span class="o">=</span> <span class="o">[</span><span class="s2">"xxx"</span><span class="o">]</span>
+license <span class="o">=</span> <span class="s2">"MIT"</span>
+readme <span class="o">=</span> <span class="s2">"README.md"</span>
+packages <span class="o">=</span> <span class="o">[</span>
+    <span class="o">{</span>include <span class="o">=</span> <span class="s2">"changelog_sample"</span>, from <span class="o">=</span> <span class="s2">"src"</span><span class="o">}</span>
+<span class="o">]</span>
+
+<span class="o">[</span>tool.poetry.build]
+generate-setup-file <span class="o">=</span> <span class="nb">false</span>
+
+<span class="o">[</span>tool.poetry.dependencies]
+python <span class="o">=</span> <span class="s2">"^3.10"</span>
+
+<span class="o">[</span>tool.poetry.group.dev.dependencies]
+commitizen <span class="o">=</span> <span class="s2">"^2.42.1"</span>
+commitizen-cz-custom-commits <span class="o">=</span> <span class="o">{</span>path <span class="o">=</span> <span class="s2">"../commitizen-cz-custom-commits"</span>, develop <span class="o">=</span> <span class="nb">true</span><span class="o">}</span>
+
+<span class="o">[</span>build-system]
+requires <span class="o">=</span> <span class="o">[</span><span class="s2">"poetry-core&gt;=1.0.0"</span><span class="o">]</span>
+build-backend <span class="o">=</span> <span class="s2">"poetry.core.masonry.api"</span>
+
+<span class="o">[</span>tool.commitizen]
+name <span class="o">=</span> <span class="s2">"cz_custom_commits"</span> <span class="c"># コミットルール名(デフォルト：cz_conventional_commits)</span>
+version <span class="o">=</span> <span class="s2">"0.0.0"</span>
+version_files <span class="o">=</span> <span class="o">[</span>
+    <span class="s2">"pyproject.toml:version"</span>
+<span class="o">]</span>
+tag_format <span class="o">=</span> <span class="s2">"v</span><span class="nv">$version</span><span class="s2">"</span>
+update_changelog_on_bump <span class="o">=</span> <span class="nb">true
+</span>bump_message <span class="o">=</span> <span class="s2">"chore: bump from </span><span class="nv">$current_version</span><span class="s2"> to </span><span class="nv">$new_version</span><span class="s2">"</span>
+changelog_file <span class="o">=</span> <span class="s2">"CHANGELOG_cz.md"</span>
+<span class="c"># major_version_zero = true # for initial development</span>
+github_repo_owner <span class="o">=</span> <span class="s2">"&lt;GitHubアカウントID&gt;"</span>
+github_repo_name <span class="o">=</span> <span class="s2">"changelog-sample"</span>
+</code></pre></div>  </div>
+
+</details>
+
+<h4 id="313-ツールヘルプ">3.1.3. ツールヘルプ</h4>
+
+<p>参考までにツールのヘルプを載せておきます。</p>
+
+<details>
+  <summary>
+    <p>詳細</p>
+  </summary>
+
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>poetry run cz <span class="nt">--help</span>
+usage: cz <span class="o">[</span><span class="nt">-h</span><span class="o">]</span> <span class="o">[</span><span class="nt">--debug</span><span class="o">]</span> <span class="o">[</span><span class="nt">-n</span> NAME] <span class="o">[</span><span class="nt">-nr</span> NO_RAISE] <span class="o">{</span>init,commit,c,ls,example,info,schema,bump,changelog,ch,check,version<span class="o">}</span> ...
+
+Commitizen is a cli tool to generate conventional commits.
+For more information about the topic go to https://conventionalcommits.org/
+
+options:
+  <span class="nt">-h</span>, <span class="nt">--help</span>            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  <span class="nt">--debug</span>               use debug mode
+  <span class="nt">-n</span> NAME, <span class="nt">--name</span> NAME  use the given commitizen <span class="o">(</span>default: cz_conventional_commits<span class="o">)</span>
+  <span class="nt">-nr</span> NO_RAISE, <span class="nt">--no-raise</span> NO_RAISE
+                        comma separated error codes that will not rise error, e.g: cz <span class="nt">-nr</span> 1,2,3 bump. See codes at https://commitizen-tools.github.io/commitizen/exit_codes/
+
+commands:
+  <span class="o">{</span>init,commit,c,ls,example,info,schema,bump,changelog,ch,check,version<span class="o">}</span>
+    init                init commitizen configuration
+    commit <span class="o">(</span>c<span class="o">)</span>          create new commit
+    <span class="nb">ls                  </span>show available commitizens
+    example             show commit example
+    info                show information about the cz
+    schema              show commit schema
+    bump                bump semantic version based on the git log
+    changelog <span class="o">(</span>ch<span class="o">)</span>      generate changelog <span class="o">(</span>note that it will overwrite existing file<span class="o">)</span>
+    check               validates that a commit message matches the commitizen schema
+    version             get the version of the installed commitizen or the current project <span class="o">(</span>default: installed commitizen<span class="o">)</span>
+
+<span class="nv">$ </span>poetry run cz bump <span class="nt">--help</span>
+usage: cz bump <span class="o">[</span><span class="nt">-h</span><span class="o">]</span> <span class="o">[</span><span class="nt">--dry-run</span><span class="o">]</span> <span class="o">[</span><span class="nt">--files-only</span><span class="o">]</span> <span class="o">[</span><span class="nt">--local-version</span><span class="o">]</span> <span class="o">[</span><span class="nt">--changelog</span><span class="o">]</span> <span class="o">[</span><span class="nt">--no-verify</span><span class="o">]</span> <span class="o">[</span><span class="nt">--yes</span><span class="o">]</span> <span class="o">[</span><span class="nt">--tag-format</span> TAG_FORMAT] <span class="o">[</span><span class="nt">--bump-message</span> BUMP_MESSAGE] <span class="o">[</span><span class="nt">--prerelease</span> <span class="o">{</span>alpha,beta,rc<span class="o">}]</span>
+               <span class="o">[</span><span class="nt">--devrelease</span> DEVRELEASE] <span class="o">[</span><span class="nt">--increment</span> <span class="o">{</span>MAJOR,MINOR,PATCH<span class="o">}]</span> <span class="o">[</span><span class="nt">--check-consistency</span><span class="o">]</span> <span class="o">[</span><span class="nt">--annotated-tag</span><span class="o">]</span> <span class="o">[</span><span class="nt">--gpg-sign</span><span class="o">]</span> <span class="o">[</span><span class="nt">--changelog-to-stdout</span><span class="o">]</span> <span class="o">[</span><span class="nt">--retry</span><span class="o">]</span> <span class="o">[</span><span class="nt">--major-version-zero</span><span class="o">]</span>
+               <span class="o">[</span><span class="nt">--prerelease-offset</span> PRERELEASE_OFFSET]
+               <span class="o">[</span>MANUAL_VERSION]
+
+positional arguments:
+  MANUAL_VERSION        bump to the given version <span class="o">(</span>e.g: 1.5.3<span class="o">)</span>
+
+options:
+  <span class="nt">-h</span>, <span class="nt">--help</span>            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  <span class="nt">--dry-run</span>             show output to stdout, no commit, no modified files
+  <span class="nt">--files-only</span>          bump version <span class="k">in </span>the files from the config
+  <span class="nt">--local-version</span>       bump only the <span class="nb">local </span>version portion
+  <span class="nt">--changelog</span>, <span class="nt">-ch</span>      generate the changelog <span class="k">for </span>the newest version
+  <span class="nt">--no-verify</span>           this option bypasses the pre-commit and commit-msg hooks
+  <span class="nt">--yes</span>                 accept automatically questions <span class="k">done</span>
+  <span class="nt">--tag-format</span> TAG_FORMAT
+                        the format used to tag the commit and <span class="nb">read </span>it, use it <span class="k">in </span>existing projects, wrap around simple quotes
+  <span class="nt">--bump-message</span> BUMP_MESSAGE
+                        template used to create the release commit, useful when working with CI
+  <span class="nt">--prerelease</span> <span class="o">{</span>alpha,beta,rc<span class="o">}</span>, <span class="nt">-pr</span> <span class="o">{</span>alpha,beta,rc<span class="o">}</span>
+                        choose <span class="nb">type </span>of prerelease
+  <span class="nt">--devrelease</span> DEVRELEASE, <span class="nt">-d</span> DEVRELEASE
+                        specify non-negative integer <span class="k">for </span>dev. release
+  <span class="nt">--increment</span> <span class="o">{</span>MAJOR,MINOR,PATCH<span class="o">}</span>
+                        manually specify the desired increment
+  <span class="nt">--check-consistency</span>, <span class="nt">-cc</span>
+                        check consistency among versions defined <span class="k">in </span>commitizen configuration and version_files
+  <span class="nt">--annotated-tag</span>, <span class="nt">-at</span>  create annotated tag instead of lightweight one
+  <span class="nt">--gpg-sign</span>, <span class="nt">-s</span>        sign tag instead of lightweight one
+  <span class="nt">--changelog-to-stdout</span>
+                        Output changelog to the stdout
+  <span class="nt">--retry</span>               retry commit <span class="k">if </span>it fails the 1st <span class="nb">time</span>
+  <span class="nt">--major-version-zero</span>  keep major version at zero, even <span class="k">for </span>breaking changes
+  <span class="nt">--prerelease-offset</span> PRERELEASE_OFFSET
+                        start pre-releases with this offset
+
+<span class="nv">$ </span>poetry run cz changelog <span class="nt">--help</span>
+usage: cz changelog <span class="o">[</span><span class="nt">-h</span><span class="o">]</span> <span class="o">[</span><span class="nt">--dry-run</span><span class="o">]</span> <span class="o">[</span><span class="nt">--file-name</span> FILE_NAME] <span class="o">[</span><span class="nt">--unreleased-version</span> UNRELEASED_VERSION] <span class="o">[</span><span class="nt">--incremental</span><span class="o">]</span> <span class="o">[</span><span class="nt">--start-rev</span> START_REV] <span class="o">[</span>rev_range]
+
+positional arguments:
+  rev_range             generates changelog <span class="k">for </span>the given version <span class="o">(</span>e.g: 1.5.3<span class="o">)</span> or version range <span class="o">(</span>e.g: 1.5.3..1.7.9<span class="o">)</span>
+
+options:
+  <span class="nt">-h</span>, <span class="nt">--help</span>            show this <span class="nb">help </span>message and <span class="nb">exit</span>
+  <span class="nt">--dry-run</span>             show changelog to stdout
+  <span class="nt">--file-name</span> FILE_NAME
+                        file name of changelog <span class="o">(</span>default: <span class="s1">'CHANGELOG.md'</span><span class="o">)</span>
+  <span class="nt">--unreleased-version</span> UNRELEASED_VERSION
+                        <span class="nb">set </span>the value <span class="k">for </span>the new version <span class="o">(</span>use the tag value<span class="o">)</span>, instead of using unreleased
+  <span class="nt">--incremental</span>         generates changelog from last created version, useful <span class="k">if </span>the changelog has been manually modified
+  <span class="nt">--start-rev</span> START_REV
+                        start rev of the changelog.If not <span class="nb">set</span>, it will generate changelog from the start
+</code></pre></div>  </div>
+
+</details>
+
+<h4 id="314-ツール実行結果">3.1.4. ツール実行結果</h4>
+
+<p>次にツールを実行した後のコミットログを確認します。バージョンの更新がコミットされ、タグが作成されています。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git log <span class="nt">--oneline</span>
+95a1fa6 <span class="o">(</span>HEAD -&gt; main, tag: v1.0.0<span class="o">)</span> chore: bump from 0.0.0 to 1.0.0
+19d8b3d <span class="o">(</span>origin/main, origin/HEAD<span class="o">)</span> build: create exe <span class="nb">env </span>of automatic changelog generator
+5cc9ed9 feat: update a feature <span class="k">for </span>the user
+3b677aa chore: <span class="k">do </span>chores excluding those mentioned above
+3b11de7 docs: add documents
+c8265c7 ci: add CI configuration files and scripts
+1aa34ef build: add the build system and external dependencies
+6a74576 <span class="nb">test</span>: add tests
+d15450e perf: improve performance
+2fb93e6 refactor: improve code <span class="o">(</span>without changing external behavior<span class="o">)</span>
+85d2dd2 style: apply a format style <span class="o">(</span>without affecting the meaning of the code<span class="o">)</span>
+4064860 fix: fix a bug <span class="k">for </span>the user
+b9131c5 feat: add a feature <span class="k">for </span>the user
+6da62b4 <span class="o">(</span>tag: v0.0.0<span class="o">)</span> Initial commit
+</code></pre></div></div>
+
+<p>最後に自動生成された変更履歴を確認します。ちなみに<code class="language-plaintext highlighter-rouge">&lt;GitHubアカウントID&gt;</code>には実際の値が出力されます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat </span>CHANGELOG.md
+<span class="c"># CHANGELOG</span>
+
+<span class="c">## [v1.0.0](https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/compare/v0.0.0...v1.0.0) (2023-04-18)</span>
+
+<span class="c">### BREAKING CHANGE</span>
+
+- make incompatible change to existing features
+
+<span class="c">### Feat</span>
+
+- update a feature <span class="k">for </span>the user <span class="o">([</span>5cc9ed9]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/5cc9ed9a8a2deae4dd43ae62527f3919bf36316d<span class="o">))</span>
+- add a feature <span class="k">for </span>the user <span class="o">([</span>b9131c5]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/b9131c5394cff65fa70dcd08ca79be543dc387e8<span class="o">))</span>
+
+<span class="c">### Fix</span>
+
+- fix a bug <span class="k">for </span>the user <span class="o">([</span>4064860]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/4064860c09bfa69170b6918d1801587b9b90adbd<span class="o">))</span>
+
+<span class="c">### Refactor</span>
+
+- improve code <span class="o">(</span>without changing external behavior<span class="o">)</span> <span class="o">([</span>2fb93e6]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/2fb93e624dbcfa4fb8514d119fdee9a3f0d8ba5b<span class="o">))</span>
+
+<span class="c">### Perf</span>
+
+- improve performance <span class="o">([</span>d15450e]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/d15450e86043ad416cd536523e53c9bde6329b9e<span class="o">))</span>
+
+<span class="c">## v0.0.0 (2023-04-09)</span>
+
+- Initial commit
+
+</code></pre></div></div>
+
+<h3 id="32-no05-python-semantic-releasepython-semantic-release">3.2. No.05: <code class="language-plaintext highlighter-rouge">python-semantic-release/python-semantic-release</code></h3>
+
+<p>2つ目のツールは、Pythonで実装されたツールです。</p>
+
+<ul>
+  <li><a href="https://github.com/python-semantic-release/python-semantic-release">python-semantic-release/python-semantic-release - GitHub</a></li>
+  <li><a href="https://python-semantic-release.readthedocs.io/en/latest/">Python Semantic Release - python-semantic-release 7.32.2 documentation</a></li>
+</ul>
+
+<h4 id="321-インストール方法">3.2.1. インストール方法</h4>
+
+<p>まずは<code class="language-plaintext highlighter-rouge">poetry</code>(パッケージ管理ツール)をインストールします。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>python3 <span class="nt">--version</span>
+Python 3.10.10
+
+<span class="nv">$ </span>pipx <span class="nb">install </span>poetry
+<span class="o">(</span>省略<span class="o">)</span>
+
+<span class="nv">$ </span>poetry <span class="nt">--version</span>
+Poetry <span class="o">(</span>version 1.4.1<span class="o">)</span>
+
+<span class="nv">$ </span>poetry config virtualenvs.in-project <span class="nb">true</span>
+</code></pre></div></div>
+
+<p>次に<code class="language-plaintext highlighter-rouge">python-semantic-release</code>をインストールします。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>poetry add python-semantic-release <span class="nt">--group</span> dev
+<span class="o">(</span>省略<span class="o">)</span>
+
+<span class="nv">$ </span>poetry show python-semantic-release
+ name         : python-semantic-release                           
+ version      : 7.33.2                                            
+ description  : Automatic Semantic Versioning <span class="k">for </span>Python projects 
+
+dependencies
+ - click <span class="o">&gt;=</span>7,&lt;9
+ - click-log <span class="o">&gt;=</span>0.3,&lt;1
+ - dotty-dict <span class="o">&gt;=</span>1.3.0,&lt;2
+ - gitpython <span class="o">&gt;=</span>3.0.8,&lt;4
+ - invoke <span class="o">&gt;=</span>1.4.1,&lt;2
+ - packaging <span class="k">*</span>
+ - python-gitlab <span class="o">&gt;=</span>2,&lt;4
+ - requests <span class="o">&gt;=</span>2.25,&lt;3
+ - semver <span class="o">&gt;=</span>2.10,&lt;3
+ - tomlkit <span class="o">&gt;=</span>0.10,&lt;1.0
+ - twine <span class="o">&gt;=</span>3,&lt;4
+ - wheel <span class="k">*</span>
+</code></pre></div></div>
+
+<h4 id="322-ツール実行ログ">3.2.2. ツール実行ログ</h4>
+
+<p>次にツールを実行する前のコミットログを確認します。これに基づいて変更履歴が自動生成されます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git log <span class="nt">--oneline</span>
+19d8b3d <span class="o">(</span>HEAD -&gt; main, origin/main, origin/HEAD<span class="o">)</span> build: create exe <span class="nb">env </span>of automatic changelog generator
+5cc9ed9 feat: update a feature <span class="k">for </span>the user <span class="c"># L3: BREAKING CHANGE: make incompatible change to existing features</span>
+3b677aa chore: <span class="k">do </span>chores excluding those mentioned above
+3b11de7 docs: add documents
+c8265c7 ci: add CI configuration files and scripts
+1aa34ef build: add the build system and external dependencies
+6a74576 <span class="nb">test</span>: add tests
+d15450e perf: improve performance
+2fb93e6 refactor: improve code <span class="o">(</span>without changing external behavior<span class="o">)</span>
+85d2dd2 style: apply a format style <span class="o">(</span>without affecting the meaning of the code<span class="o">)</span>
+4064860 fix: fix a bug <span class="k">for </span>the user
+b9131c5 feat: add a feature <span class="k">for </span>the user
+6da62b4 <span class="o">(</span>tag: v0.0.0<span class="o">)</span> Initial commit
+</code></pre></div></div>
+
+<p>次に<code class="language-plaintext highlighter-rouge">python-semantic-release</code>を実行します。バージョンはコミットログに基づいて自動計算されます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>poetry run semantic-release publish
+Current version: 0.0.0, Current release version: 0.0.0
+Bumping with a major version to 1.0.0
+Pushing new version
+error: Cmd<span class="o">(</span><span class="s1">'git'</span><span class="o">)</span> failed due to: <span class="nb">exit </span>code<span class="o">(</span>128<span class="o">)</span>
+error:   cmdline: git push origin main
+error:   stderr: remote: Repository not found.
+error: fatal: Authentication failed <span class="k">for</span> &lt;repository url&gt;
+<span class="c"># An option like `push_changes` that specifies whether or not to push changes to the repository is not implemented yet,</span>
+<span class="c"># so if a env `GH_TOKEN` is not set, output error log when pushing.</span>
+</code></pre></div></div>
+
+<p>補足事項として、実行する前に<code class="language-plaintext highlighter-rouge">pyproject.toml</code>がプロジェクトルートに配置されている必要があります。</p>
+
+<details>
+  <summary>
+    <p>詳細</p>
+  </summary>
+
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat </span>pyproject.toml
+<span class="o">[</span>tool.poetry]
+name <span class="o">=</span> <span class="s2">"changelog-sample"</span>
+version <span class="o">=</span> <span class="s2">"0.0.0"</span>
+description <span class="o">=</span> <span class="s2">"changelog sample"</span>
+authors <span class="o">=</span> <span class="o">[</span><span class="s2">"xxx"</span><span class="o">]</span>
+license <span class="o">=</span> <span class="s2">"MIT"</span>
+readme <span class="o">=</span> <span class="s2">"README.md"</span>
+packages <span class="o">=</span> <span class="o">[</span>
+    <span class="o">{</span>include <span class="o">=</span> <span class="s2">"changelog_sample"</span>, from <span class="o">=</span> <span class="s2">"src"</span><span class="o">}</span>
+<span class="o">]</span>
+
+<span class="o">[</span>tool.poetry.build]
+generate-setup-file <span class="o">=</span> <span class="nb">false</span>
+
+<span class="o">[</span>tool.poetry.dependencies]
+python <span class="o">=</span> <span class="s2">"^3.10"</span>
+
+<span class="o">[</span>tool.poetry.group.dev.dependencies]
+python-semantic-release <span class="o">=</span> <span class="s2">"^7.33.2"</span>
+
+<span class="o">[</span>build-system]
+requires <span class="o">=</span> <span class="o">[</span><span class="s2">"poetry-core&gt;=1.0.0"</span><span class="o">]</span>
+build-backend <span class="o">=</span> <span class="s2">"poetry.core.masonry.api"</span>
+
+<span class="o">[</span>tool.semantic_release]
+branch <span class="o">=</span> <span class="s2">"main"</span>
+version_toml <span class="o">=</span> <span class="o">[</span>
+    <span class="s2">"pyproject.toml:tool.poetry.version"</span>,
+    <span class="s2">"pyproject.toml:tool.commitizen.version"</span>
+<span class="o">]</span>
+version_source <span class="o">=</span> <span class="s2">"commit"</span>
+<span class="c"># major_on_zero = true # for initial development</span>
+commit_subject <span class="o">=</span> <span class="s2">"chore: bump to {version}"</span>
+commit_message <span class="o">=</span> <span class="s2">""</span>
+commit_author <span class="o">=</span> <span class="s2">"semantic-release &lt;noreply@github.com&gt;"</span> <span class="c"># this is author, but not comitter</span>
+changelog_sections <span class="o">=</span> <span class="s2">"breaking, feature, fix, performance"</span>
+changelog_components <span class="o">=</span> <span class="s2">"semantic_release.changelog.changelog_headers,semantic_release.changelog.compare_url"</span>
+changelog_file <span class="o">=</span> <span class="s2">"CHANGELOG_sr.md"</span>
+upload_to_repository <span class="o">=</span> <span class="nb">false</span> <span class="c"># upload distributions to pypi repository</span>
+upload_to_release <span class="o">=</span> <span class="nb">false</span> <span class="c"># upload distributions to GitHub releases</span>
+tag_format <span class="o">=</span> <span class="s2">"v{version}"</span>
+</code></pre></div>  </div>
+
+</details>
+
+<h4 id="323-ツールヘルプ">3.2.3. ツールヘルプ</h4>
+
+<p>参考までにツールのヘルプを載せておきます。</p>
+
+<details>
+  <summary>
+    <p>詳細</p>
+  </summary>
+
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>poetry run semantic-release <span class="nt">--help</span>
+Usage: semantic-release <span class="o">[</span>OPTIONS] COMMAND <span class="o">[</span>ARGS]...
+
+Options:
+  <span class="nt">-v</span>, <span class="nt">--verbosity</span> LVL             Either CRITICAL, ERROR, WARNING, INFO or
+                                  DEBUG
+  <span class="nt">--major</span>                         Force major version.
+  <span class="nt">--minor</span>                         Force minor version.
+  <span class="nt">--patch</span>                         Force patch version.
+  <span class="nt">--prerelease</span>                    Creates a prerelease version.
+  <span class="nt">--prerelease-patch</span> / <span class="nt">--no-prerelease-patch</span>
+                                  whether or not prerelease always gets at
+                                  least a patch-level bump  <span class="o">[</span>default:
+                                  prerelease-patch]
+  <span class="nt">--post</span>                          Post changelog.
+  <span class="nt">--retry</span>                         Retry the same release, <span class="k">do </span>not bump.
+  <span class="nt">--noop</span>                          No-operations mode, finds the new version
+                                  number without changing it.
+  <span class="nt">-D</span>, <span class="nt">--define</span> TEXT               <span class="nv">setting</span><span class="o">=</span><span class="s2">"value"</span>, override a configuration
+                                  value.
+  <span class="nt">--help</span>                          Show this message and exit.
+
+Commands:
+  changelog      Generate the changelog since the last release.
+  print-version  Print the current or new version to standard output.
+  publish        Run the version task, <span class="k">then </span>push to git and upload to an...
+  version        Detect the new version according to git log and semver.
+
+<span class="nv">$ </span>poetry run semantic-release version <span class="nt">--help</span>
+Usage: semantic-release version <span class="o">[</span>OPTIONS]
+
+  Detect the new version according to git log and semver.
+
+  Write the new version number and commit it, unless the noop option is True.
+
+Options:
+  <span class="nt">-v</span>, <span class="nt">--verbosity</span> LVL             Either CRITICAL, ERROR, WARNING, INFO or
+                                  DEBUG
+  <span class="nt">--major</span>                         Force major version.
+  <span class="nt">--minor</span>                         Force minor version.
+  <span class="nt">--patch</span>                         Force patch version.
+  <span class="nt">--prerelease</span>                    Creates a prerelease version.
+  <span class="nt">--prerelease-patch</span> / <span class="nt">--no-prerelease-patch</span>
+                                  whether or not prerelease always gets at
+                                  least a patch-level bump  <span class="o">[</span>default:
+                                  prerelease-patch]
+  <span class="nt">--post</span>                          Post changelog.
+  <span class="nt">--retry</span>                         Retry the same release, <span class="k">do </span>not bump.
+  <span class="nt">--noop</span>                          No-operations mode, finds the new version
+                                  number without changing it.
+  <span class="nt">-D</span>, <span class="nt">--define</span> TEXT               <span class="nv">setting</span><span class="o">=</span><span class="s2">"value"</span>, override a configuration
+                                  value.
+  <span class="nt">--help</span>                          Show this message and exit.
+
+<span class="nv">$ </span>poetry run semantic-release changelog <span class="nt">--help</span>
+Usage: semantic-release changelog <span class="o">[</span>OPTIONS]
+
+  Generate the changelog since the last release.
+
+  :raises ImproperConfigurationError: <span class="k">if </span>there is no current version
+
+Options:
+  <span class="nt">-v</span>, <span class="nt">--verbosity</span> LVL             Either CRITICAL, ERROR, WARNING, INFO or
+                                  DEBUG
+  <span class="nt">--major</span>                         Force major version.
+  <span class="nt">--minor</span>                         Force minor version.
+  <span class="nt">--patch</span>                         Force patch version.
+  <span class="nt">--prerelease</span>                    Creates a prerelease version.
+  <span class="nt">--prerelease-patch</span> / <span class="nt">--no-prerelease-patch</span>
+                                  whether or not prerelease always gets at
+                                  least a patch-level bump  <span class="o">[</span>default:
+                                  prerelease-patch]
+  <span class="nt">--post</span>                          Post changelog.
+  <span class="nt">--retry</span>                         Retry the same release, <span class="k">do </span>not bump.
+  <span class="nt">--noop</span>                          No-operations mode, finds the new version
+                                  number without changing it.
+  <span class="nt">-D</span>, <span class="nt">--define</span> TEXT               <span class="nv">setting</span><span class="o">=</span><span class="s2">"value"</span>, override a configuration
+                                  value.
+  <span class="nt">--unreleased</span> / <span class="nt">--released</span>       Decides whether to show the released or
+                                  unreleased changelog.
+  <span class="nt">--help</span>                          Show this message and exit.
+
+<span class="nv">$ </span>poetry run semantic-release publish <span class="nt">--help</span>
+Usage: semantic-release publish <span class="o">[</span>OPTIONS]
+
+  Run the version task, <span class="k">then </span>push to git and upload to an artifact repository
+  / GitHub Releases.
+
+Options:
+  <span class="nt">-v</span>, <span class="nt">--verbosity</span> LVL             Either CRITICAL, ERROR, WARNING, INFO or
+                                  DEBUG
+  <span class="nt">--major</span>                         Force major version.
+  <span class="nt">--minor</span>                         Force minor version.
+  <span class="nt">--patch</span>                         Force patch version.
+  <span class="nt">--prerelease</span>                    Creates a prerelease version.
+  <span class="nt">--prerelease-patch</span> / <span class="nt">--no-prerelease-patch</span>
+                                  whether or not prerelease always gets at
+                                  least a patch-level bump  <span class="o">[</span>default:
+                                  prerelease-patch]
+  <span class="nt">--post</span>                          Post changelog.
+  <span class="nt">--retry</span>                         Retry the same release, <span class="k">do </span>not bump.
+  <span class="nt">--noop</span>                          No-operations mode, finds the new version
+                                  number without changing it.
+  <span class="nt">-D</span>, <span class="nt">--define</span> TEXT               <span class="nv">setting</span><span class="o">=</span><span class="s2">"value"</span>, override a configuration
+                                  value.
+  <span class="nt">--help</span>                          Show this message and exit.
+</code></pre></div>  </div>
+
+</details>
+
+<h4 id="324-ツール実行結果">3.2.4. ツール実行結果</h4>
+
+<p>次にツールを実行した後のコミットログを確認します。バージョンと変更履歴の更新がコミットされ、タグが作成されています。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git log <span class="nt">--oneline</span>
+89dfb7b <span class="o">(</span>HEAD -&gt; main, tag: v1.0.0<span class="o">)</span> chore: bump to 1.0.0
+19d8b3d <span class="o">(</span>origin/main, origin/HEAD<span class="o">)</span> build: create exe <span class="nb">env </span>of automatic changelog generator
+5cc9ed9 feat: update a feature <span class="k">for </span>the user
+3b677aa chore: <span class="k">do </span>chores excluding those mentioned above
+3b11de7 docs: add documents
+c8265c7 ci: add CI configuration files and scripts
+1aa34ef build: add the build system and external dependencies
+6a74576 <span class="nb">test</span>: add tests
+d15450e perf: improve performance
+2fb93e6 refactor: improve code <span class="o">(</span>without changing external behavior<span class="o">)</span>
+85d2dd2 style: apply a format style <span class="o">(</span>without affecting the meaning of the code<span class="o">)</span>
+4064860 fix: fix a bug <span class="k">for </span>the user
+b9131c5 feat: add a feature <span class="k">for </span>the user
+6da62b4 <span class="o">(</span>tag: v0.0.0<span class="o">)</span> Initial commit
+</code></pre></div></div>
+
+<p>最後に自動生成された変更履歴を確認します。ちなみに<code class="language-plaintext highlighter-rouge">&lt;GitHubアカウントID&gt;</code>には実際の値が出力されます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat </span>CHANGELOG_sr.md
+<span class="c"># CHANGELOG</span>
+
+&lt;<span class="o">!</span><span class="nt">--next-version-placeholder--</span><span class="o">&gt;</span>
+
+<span class="c">## v1.0.0 (2023-04-10)</span>
+<span class="c">### Breaking</span>
+<span class="k">*</span> make incompatible change to existing features <span class="o">([</span><span class="sb">`</span>5cc9ed9<span class="sb">`</span><span class="o">](</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/5cc9ed9a8a2deae4dd43ae62527f3919bf36316d<span class="o">))</span>
+
+<span class="c">### Feature</span>
+<span class="k">*</span> Update a feature <span class="k">for </span>the user <span class="o">([</span><span class="sb">`</span>5cc9ed9<span class="sb">`</span><span class="o">](</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/5cc9ed9a8a2deae4dd43ae62527f3919bf36316d<span class="o">))</span>
+<span class="k">*</span> Add a feature <span class="k">for </span>the user <span class="o">([</span><span class="sb">`</span>b9131c5<span class="sb">`</span><span class="o">](</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/b9131c5394cff65fa70dcd08ca79be543dc387e8<span class="o">))</span>
+
+<span class="c">### Fix</span>
+<span class="k">*</span> Fix a bug <span class="k">for </span>the user <span class="o">([</span><span class="sb">`</span>4064860<span class="sb">`</span><span class="o">](</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/4064860c09bfa69170b6918d1801587b9b90adbd<span class="o">))</span>
+
+<span class="c">### Performance</span>
+<span class="k">*</span> Improve performance <span class="o">([</span><span class="sb">`</span>d15450e<span class="sb">`</span><span class="o">](</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/d15450e86043ad416cd536523e53c9bde6329b9e<span class="o">))</span>
+
+<span class="k">**</span><span class="o">[</span>See all commits <span class="k">in </span>this version]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/compare/v0.0.0...v1.0.0<span class="o">)</span><span class="k">**</span>
+
+</code></pre></div></div>
+
+<h3 id="33-no01-conventional-changelogconventional-changelog-cli">3.3. No.01: <code class="language-plaintext highlighter-rouge">conventional-changelog/conventional-changelog-cli</code></h3>
+
+<p>3つ目のツールは、JavaScriptで実装されたツールです。</p>
+
+<ul>
+  <li><a href="https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli">conventional-changelog/conventional-changelog-cli - GitHub</a></li>
+</ul>
+
+<h4 id="331-インストール方法">3.3.1. インストール方法</h4>
+
+<p>まずは、<code class="language-plaintext highlighter-rouge">Node.js</code>(JavaScript実行環境)及び<code class="language-plaintext highlighter-rouge">npm</code>(JavaScript系パッケージ管理ツール)をインストールします。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>curl <span class="nt">-fsSL</span> https://deb.nodesource.com/setup_19.x | <span class="nb">sudo</span> <span class="nt">-E</span> bash -
+<span class="nv">$ </span><span class="c"># サードパーティ用のaptリポジトリ情報(ディレクトリ`/etc/apt/sources.list.d/`)にノードソース`Node.js 19.x`を追加する</span>
+<span class="o">(</span>省略<span class="o">)</span>
+
+<span class="nv">$ </span><span class="nb">cat</span> /etc/apt/sources.list.d/nodesource.list
+<span class="nv">$ </span><span class="c"># サードパーティ用のaptリポジトリ情報(ディレクトリ`/etc/apt/sources.list.d/`)を確認する</span>
+deb <span class="o">[</span>signed-by<span class="o">=</span>/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_19.x bullseye main
+deb-src <span class="o">[</span>signed-by<span class="o">=</span>/usr/share/keyrings/nodesource.gpg] https://deb.nodesource.com/node_19.x bullseye main
+
+<span class="nv">$ </span><span class="nb">sudo </span>apt update <span class="o">&amp;&amp;</span> <span class="nb">sudo </span>apt <span class="nb">install</span> <span class="nt">-y</span> nodejs
+<span class="o">(</span>省略<span class="o">)</span>
+
+<span class="nv">$ </span>node <span class="nt">--version</span>
+v19.8.1
+
+<span class="nv">$ </span>npm <span class="nt">--version</span>
+9.5.1
+</code></pre></div></div>
+
+<p>次に<code class="language-plaintext highlighter-rouge">conventional-changelog-cli</code>をインストールします。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd </span>workspace/Git/python/changelog-sample
+
+<span class="nv">$ </span><span class="nb">sudo </span>npm <span class="nb">install </span>conventional-changelog-cli
+<span class="o">(</span>省略<span class="o">)</span>
+
+<span class="nv">$ </span>npm <span class="nb">ls
+</span>changelog-sample@0.0.0 /root/workspace/Git/python/changelog-sample
+└── conventional-changelog-cli@2.2.2
+</code></pre></div></div>
+
+<h4 id="332-ツール実行ログ">3.3.2. ツール実行ログ</h4>
+
+<p>次にツールを実行する前のコミットログを確認します。これに基づいて変更履歴が自動生成されます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git log <span class="nt">--oneline</span>
+19d8b3d <span class="o">(</span>HEAD -&gt; main, origin/main, origin/HEAD<span class="o">)</span> build: create exe <span class="nb">env </span>of automatic changelog generator
+5cc9ed9 feat: update a feature <span class="k">for </span>the user <span class="c"># L3: BREAKING CHANGE: make incompatible change to existing features</span>
+3b677aa chore: <span class="k">do </span>chores excluding those mentioned above
+3b11de7 docs: add documents
+c8265c7 ci: add CI configuration files and scripts
+1aa34ef build: add the build system and external dependencies
+6a74576 <span class="nb">test</span>: add tests
+d15450e perf: improve performance
+2fb93e6 refactor: improve code <span class="o">(</span>without changing external behavior<span class="o">)</span>
+85d2dd2 style: apply a format style <span class="o">(</span>without affecting the meaning of the code<span class="o">)</span>
+4064860 fix: fix a bug <span class="k">for </span>the user
+b9131c5 feat: add a feature <span class="k">for </span>the user
+6da62b4 <span class="o">(</span>tag: v0.0.0<span class="o">)</span> Initial commit
+</code></pre></div></div>
+
+<p>次に<code class="language-plaintext highlighter-rouge">conventional-changelog-cli</code>を実行します。バージョンはコミットログに基づいて自動計算される訳ではなく、どのバージョンを上げるかユーザが指定する必要があります。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>npm version major
+
+<span class="o">&gt;</span> version
+<span class="o">&gt;</span> conventional-changelog <span class="nt">--preset</span> angular <span class="nt">--release-count</span> 0 <span class="nt">--tag-prefix</span> v <span class="nt">--pkg</span> package.json <span class="nt">--infile</span> CHANGELOG_cc.md <span class="nt">--same-file</span> <span class="o">&amp;&amp;</span> git add CHANGELOG_cc.md
+
+v1.0.0
+</code></pre></div></div>
+
+<p>補足事項として、実行する前に<code class="language-plaintext highlighter-rouge">package.json</code>がプロジェクトルートに配置されている必要があります。</p>
+
+<details>
+  <summary>
+    <p>詳細</p>
+  </summary>
+
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat </span>package.json
+<span class="o">{</span>
+  <span class="s2">"version"</span>: <span class="s2">"0.0.0"</span>,
+  <span class="s2">"scripts"</span>: <span class="o">{</span>
+    <span class="s2">"version"</span>: <span class="s2">"conventional-changelog --preset angular --release-count 0 --tag-prefix v --pkg package.json --infile CHANGELOG_cc.md --same-file &amp;&amp; git add CHANGELOG_cc.md"</span>
+  <span class="o">}</span>,
+  <span class="s2">"dependencies"</span>: <span class="o">{</span>
+    <span class="s2">"conventional-changelog-cli"</span>: <span class="s2">"^2.2.2"</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>  </div>
+
+</details>
+
+<h4 id="333-ツールヘルプ">3.3.3. ツールヘルプ</h4>
+
+<p>参考までにツールのヘルプを載せておきます。</p>
+
+<details>
+  <summary>
+    <p>詳細</p>
+  </summary>
+
+  <div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>npm version <span class="nt">--help</span>
+Bump a package version
+
+Usage:
+npm version <span class="o">[</span>&lt;newversion&gt; | major | minor | patch | premajor | preminor | prepatch | prerelease | from-git]
+
+Options:
+<span class="o">[</span><span class="nt">--allow-same-version</span><span class="o">]</span> <span class="o">[</span><span class="nt">--no-commit-hooks</span><span class="o">]</span> <span class="o">[</span><span class="nt">--no-git-tag-version</span><span class="o">]</span> <span class="o">[</span><span class="nt">--json</span><span class="o">]</span>
+<span class="o">[</span><span class="nt">--preid</span> prerelease-id] <span class="o">[</span><span class="nt">--sign-git-tag</span><span class="o">]</span>
+<span class="o">[</span><span class="nt">-w</span>|--workspace &lt;workspace-name&gt; <span class="o">[</span><span class="nt">-w</span>|--workspace &lt;workspace-name&gt; ...]]
+<span class="o">[</span><span class="nt">-ws</span>|--workspaces] <span class="o">[</span><span class="nt">--no-workspaces-update</span><span class="o">]</span> <span class="o">[</span><span class="nt">--include-workspace-root</span><span class="o">]</span>
+
+<span class="nb">alias</span>: verison
+
+Run <span class="s2">"npm help version"</span> <span class="k">for </span>more info
+
+<span class="nv">$ </span>conventional-changelog <span class="nt">--help</span>
+
+  Generate a changelog from git metadata
+
+  Usage
+    conventional-changelog
+
+  Example
+    conventional-changelog <span class="nt">-i</span> CHANGELOG.md <span class="nt">--same-file</span>
+
+  Options
+    <span class="nt">-i</span>, <span class="nt">--infile</span>              Read the CHANGELOG from this file
+
+    <span class="nt">-o</span>, <span class="nt">--outfile</span>             Write the CHANGELOG to this file
+                              If unspecified, it prints to stdout
+
+    <span class="nt">-s</span>, <span class="nt">--same-file</span>           Outputting to the infile so you <span class="k">do </span>not need to specify the same file as outfile
+
+    <span class="nt">-p</span>, <span class="nt">--preset</span>              Name of the preset you want to use. Must be one of the following:
+                              angular, atom, codemirror, conventionalcommits, ember, eslint, express, jquery or jshint
+
+    <span class="nt">-k</span>, <span class="nt">--pkg</span>                 A filepath of where your package.json is located
+                              Default is the closest package.json from cwd
+
+    <span class="nt">-a</span>, <span class="nt">--append</span>              Should the newer release be appended to the older release
+                              Default: <span class="nb">false</span>
+
+    <span class="nt">-r</span>, <span class="nt">--release-count</span>       How many releases to be generated from the latest
+                              If 0, the whole changelog will be regenerated and the outfile will be overwritten
+                              Default: 1
+
+    <span class="nt">--skip-unstable</span>           If given, unstable tags will be skipped, e.g., x.x.x-alpha.1, x.x.x-rc.2
+
+    <span class="nt">-u</span>, <span class="nt">--output-unreleased</span>   Output unreleased changelog
+
+    <span class="nt">-v</span>, <span class="nt">--verbose</span>             Verbose output. Use this <span class="k">for </span>debugging
+                              Default: <span class="nb">false</span>
+
+    <span class="nt">-n</span>, <span class="nt">--config</span>              A filepath of your config script
+                              Example of a config script: https://github.com/conventional-changelog/conventional-changelog/blob/master/packages/conventional-changelog-cli/test/fixtures/config.js
+
+    <span class="nt">-c</span>, <span class="nt">--context</span>             A filepath of a json that is used to define template variables
+    <span class="nt">-l</span>, <span class="nt">--lerna-package</span>       Generate a changelog <span class="k">for </span>a specific lerna package <span class="o">(</span>:pkg-name@1.0.0<span class="o">)</span>
+    <span class="nt">-t</span>, <span class="nt">--tag-prefix</span>          Tag prefix to consider when reading the tags
+    <span class="nt">--commit-path</span>             Generate a changelog scoped to a specific directory
+</code></pre></div>  </div>
+
+</details>
+
+<h4 id="334-ツール実行結果">3.3.4. ツール実行結果</h4>
+
+<p>次にツールを実行した後のコミットログを確認します。バージョンと変更履歴の更新がコミットされ、タグが作成されています。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>git log <span class="nt">--oneline</span>
+c9559e3 <span class="o">(</span>HEAD -&gt; main, tag: v1.0.0<span class="o">)</span> 1.0.0
+19d8b3d <span class="o">(</span>origin/main, origin/HEAD<span class="o">)</span> build: create exe <span class="nb">env </span>of automatic changelog generator
+5cc9ed9 feat: update a feature <span class="k">for </span>the user
+3b677aa chore: <span class="k">do </span>chores excluding those mentioned above
+3b11de7 docs: add documents
+c8265c7 ci: add CI configuration files and scripts
+1aa34ef build: add the build system and external dependencies
+6a74576 <span class="nb">test</span>: add tests
+d15450e perf: improve performance
+2fb93e6 refactor: improve code <span class="o">(</span>without changing external behavior<span class="o">)</span>
+85d2dd2 style: apply a format style <span class="o">(</span>without affecting the meaning of the code<span class="o">)</span>
+4064860 fix: fix a bug <span class="k">for </span>the user
+b9131c5 feat: add a feature <span class="k">for </span>the user
+6da62b4 <span class="o">(</span>tag: v0.0.0<span class="o">)</span> Initial commit
+</code></pre></div></div>
+
+<p>最後に自動生成された変更履歴を確認します。ちなみに<code class="language-plaintext highlighter-rouge">&lt;GitHubアカウントID&gt;</code>には実際の値が出力されます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cat </span>CHANGELOG_cc.md
+<span class="c"># [1.0.0](https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/compare/v0.0.0...v1.0.0) (2023-04-10)</span>
+
+
+<span class="c">### Bug Fixes</span>
+
+<span class="k">*</span> fix a bug <span class="k">for </span>the user <span class="o">([</span>4064860]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/4064860c09bfa69170b6918d1801587b9b90adbd<span class="o">))</span>
+
+
+<span class="c">### Features</span>
+
+<span class="k">*</span> add a feature <span class="k">for </span>the user <span class="o">([</span>b9131c5]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/b9131c5394cff65fa70dcd08ca79be543dc387e8<span class="o">))</span>
+<span class="k">*</span> update a feature <span class="k">for </span>the user <span class="o">([</span>5cc9ed9]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/5cc9ed9a8a2deae4dd43ae62527f3919bf36316d<span class="o">))</span>
+
+
+<span class="c">### Performance Improvements</span>
+
+<span class="k">*</span> improve performance <span class="o">([</span>d15450e]<span class="o">(</span>https://github.com/&lt;GitHubアカウントID&gt;/changelog-sample/commit/d15450e86043ad416cd536523e53c9bde6329b9e<span class="o">))</span>
+
+
+<span class="c">### BREAKING CHANGES</span>
+
+<span class="k">*</span> make incompatible change to existing features
+
+
+
+<span class="c"># 0.0.0 (2023-04-09)</span>
+
+
+
+</code></pre></div></div>
+
+<h2 id="4-変更履歴自動生成ツールの仕様まとめ">4. 変更履歴自動生成ツールの仕様まとめ</h2>
+
+<p>前章では自身の開発環境にて変更履歴自動生成ツールを用いたサンプルを作成してみました。その結果、基本的には以下の機能が提供されていることが確認できました。</p>
+
+<ul>
+  <li>コミットメッセージに基づいてバージョンとタグが作成されること</li>
+  <li>コミットメッセージのヘッダの種別(<code class="language-plaintext highlighter-rouge">type</code>)ごとに変更履歴が生成されること</li>
+  <li>変更履歴(<code class="language-plaintext highlighter-rouge">CHANGELOG.md</code>など)とバージョン(<code class="language-plaintext highlighter-rouge">pyproject.toml</code>や<code class="language-plaintext highlighter-rouge">package.json</code>)の更新が同時にコミットされること
+    <ul>
+      <li>変更履歴とバージョンの更新が鶏と卵の関係になっているが、内部でよしなに処理してくれる</li>
+    </ul>
+  </li>
+</ul>
+
+<p>また、ツールごとに大きく異なる点も確認できました。</p>
+
+<ul>
+  <li>変更履歴に旧タグと新タグの差分確認用のリンクが出力されること</li>
+  <li>変更履歴にコミットへのリンクが出力されること</li>
+</ul>
+
+<p>更に特徴的だった点が自動生成の部分をカスタムできる枠組みを提供しているツール(<code class="language-plaintext highlighter-rouge">commitizen-tools/commitizen</code>)もあったことです。よく見かけたのは設定ファイルで少しカスタムできるというツールでしたが、ツールごとに一長一短で物足りなさを感じていました。しかし、この特徴的なツールはカスタム用のスーパークラスが用意されていて、各自のリポジトリで好きなように実装してもいいですよというスタンスのツールでした。なので、今回調査したツールの中では一番のお気に入りです。</p>
+
+<p>また、細かいところで気になる点もありましたが、個人の好みの問題になりそうなので割愛します。</p>
+
+<h2 id="5-最後に">5. 最後に</h2>
+
+<p>本記事では<code class="language-plaintext highlighter-rouge">Conventional Commits</code>に従ったコミットログに基づいて変更履歴を自動生成するツールを紹介しました。これで今後は変更履歴を自動生成することができるので、当初感じていた億劫になることはなくなると思います。ただ、CI関連はドキュメントにてできることを確認しただけでサンプルを作成していません。今後必要になった際にサンプルを作成してみたいと思います。</p>
+
+<h2 id="6-参考url">6. 参考URL</h2>
+
+<p>今回、調査や検証を行った際に訪問したサイトのURLになります。記事の中でリンクを貼っているサイトのみチェックマークを付けています。</p>
+
+<h3 id="61-commit-message-guidelines-by-angular">6.1. Commit Message Guidelines by Angular</h3>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://github.com/search?q=Angular&amp;type=repositories">Search - Angular - GitHub</a>
+    <ul class="task-list">
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines">Commit Message Guidelines by Angular</a></li>
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines">Commit Message Guidelines by AngularJS (archived)</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="62-conventional-commits">6.2. Conventional Commits</h3>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://www.google.com/search?q=Git+コミットメッセージ+規約">Git コミットメッセージ 規約 - Google 検索</a>
+    <ul class="task-list">
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://www.conventionalcommits.org/ja/v1.0.0/">Conventional Commits 1.0.0 - Conventional Commits</a></li>
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://www.conventionalcommits.org/en/about/">About - Conventional Commits</a>
+        <ul class="task-list">
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-cli">conventional-changelog/conventional-changelog-cli - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/joselitofilho/go-conventional-commits">joselitofilho/go-conventional-commits - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/leodido/go-conventionalcommits">leodido/go-conventionalcommits - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/goreleaser/chglog">goreleaser/chglog - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/commitizen-tools/commitizen">commitizen-tools/commitizen - GitHub</a>
+            <ul class="task-list">
+              <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://commitizen-tools.github.io/commitizen/">Commitizen documentation</a></li>
+            </ul>
+          </li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/marcocesarato/php-conventional-changelog">marcocesarato/php-conventional-changelog - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/semantic-release/cli">semantic-release/semantic-release-cli - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/semantic-release/semantic-release">semantic-release/semantic-release - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/python-semantic-release/python-semantic-release">python-semantic-release/python-semantic-release - GitHub</a>
+            <ul class="task-list">
+              <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://python-semantic-release.readthedocs.io/en/latest/">Python Semantic Release - python-semantic-release 7.32.2 documentation</a></li>
+            </ul>
+          </li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/jgoodman8/pyhist">jgoodman8/pyhist - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/PSanetra/git-semver">PSanetra/git-semver - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/adamtabrams/change">adamtabrams/change - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/bvieira/sv4git">bvieira/sv4git - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/chaaz/versio">chaaz/versio - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/tomasbjerre/git-changelog-command-line">tomasbjerre/git-changelog-command-line - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/tomasbjerre/git-changelog-lib">tomasbjerre/git-changelog-lib - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/cocogitto/cocogitto">cocogitto/cocogitto - GitHub</a></li>
+          <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/gembaadvantage/uplift">gembaadvantage/uplift - GitHub</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="63-github-programming-language-ranking">6.3. GitHub Programming Language Ranking</h3>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://www.google.com/search?q=GitHub+Programming+Language+Ranking">GitHub Programming Language Ranking - Google 検索</a>
+    <ul class="task-list">
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://octoverse.github.com/2022/top-programming-languages#Frame%201776">The top programming languages - The State of the Octoverse</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="64-conventional-changelog-cli">6.4. conventional-changelog-cli</h3>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://www.google.com/search?q=conventional-changelog-cli">conventional-changelog-cli - Google 検索</a>
+    <ul class="task-list">
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://ikmbear.hatenablog.com/entry/20220208/1644282000">Conventional CommitでGemのCHANGELOGをコミットから自動作成する - セットプチフォッカ</a></li>
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://wp-kyoto.net/generate-changelog-by-conventional-changelog-cli/">conventional-changelog-cliでCHANGELOGを自動生成してみる - WP-kyoto</a></li>
+    </ul>
+  </li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://www.google.com/search?q=Ubuntu+npm+インストール">Ubuntu npm インストール - Google 検索</a>
+    <ul class="task-list">
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://inno-tech-life.com/dev/js/nodejs_ubuntu/">【Ubuntu版】Node.js インストール方法をまとめ - Inno-Tech-Life</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="65-github-changelog-generator">6.5. github-changelog-generator</h3>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" /><a href="https://www.google.com/search?q=changelog+generator+issue+pr">changelog generator issue pr - Google 検索</a>
+    <ul class="task-list">
+      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" /><a href="https://github.com/github-changelog-generator/github-changelog-generator">github-changelog-generator/github-changelog-generator</a></li>
+    </ul>
+  </li>
+</ul>
+
+
+    
+  <div class="share-bar">
+    <ul class="share-buttons">
+      
+        <li class="share-twitter">
+          <a href="https://twitter.com/intent/tweet?text=%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB%E3%81%AE%E8%AA%BF%E6%9F%BB%E3%81%A8%E7%B4%B9%E4%BB%8B+%7C+Rem_Blog%0ahttps://silverag-corgi.github.io/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB%E3%81%AE%E8%AA%BF%E6%9F%BB%E3%81%A8%E7%B4%B9%E4%BB%8B/" target="_blank" rel="noopener" title="Tweet">
+            <i class="fab fa-fw fa-2x fa-twitter-square"></i>
+          </a>
+        </li>
+      
+
+      
+        <li class="share-line">
+          <a href="https://social-plugins.line.me/lineit/share?url=https://silverag-corgi.github.io/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB%E3%81%AE%E8%AA%BF%E6%9F%BB%E3%81%A8%E7%B4%B9%E4%BB%8B/" target="_blank" rel="noopener" title="Tweet">
+            <i class="fab fa-fw fa-2x fa-line"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+  </div>
+</article>
+
+<aside class="post-navi-card">
+  <ul class="pagination justify-content-around">
+    
+      
+        <li class="page-item col-lg-6">
+          <a class="page-link" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/githubstars%E4%B8%8A%E4%BD%8D5%E4%BB%B6%E3%81%AE%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%E3%81%AE%E6%83%85%E5%A0%B1%E6%95%B4%E7%90%86/">GitHubStars上位5件の静的サイトジェネレーターの情報整理</a>
+        </li>
+      
+
+      
+        <li class="page-item col-lg-6">
+          <a class="page-link" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/git%E3%81%AE%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E3%81%AE%E8%A6%8F%E7%B4%84-%E7%AC%AC%EF%BC%92%E5%BC%BE/">Gitのコミットメッセージの規約(第２弾)</a>
+        </li>
+      
+    
+  </ul>
+</aside>
+
+        </div>
+
+        <div class="col-lg-3">
+          <aside class="profile-card">
+  <h2>
+    プロフィール
+  </h2>
+  <p class="user-image">
+    <a class="nav-link" href="/blog/about/">
+      <img src="/blog/assets/img/dog61_icon.jpg" alt="ユーザ画像" />
+    </a>
+  </p>
+  <p>
+    Webエンジニア(バックエンド)です。 アイコンからわかる通り、犬が好きです。
+  </p>
+  <ul class="social-media">
+  
+    <li>
+      <a title="silverag-corgi on Github" href="https://github.com/silverag-corgi" target="_blank" rel="noopener"><i class="fab fa-github fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="silverag_corgi on Twitter" href="https://twitter.com/silverag_corgi" target="_blank" rel="noopener"><i class="fab fa-twitter fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="/data/feed.xml RSS" href="/blog/data/feed.xml" target="_blank" rel="noopener"><i class="fas fa-fw fa-rss fa-2x"></i></a>
+    </li>
+  
+</ul>
+
+</aside>
+
+<aside class="recent-posts-card">
+  <h2>
+    最近の記事
+  </h2>
+  <ul class="fa-ul">
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E6%97%A2%E5%AD%98%E3%81%AEwindows%E3%82%92%E6%AE%8B%E3%81%97%E3%81%A6%E5%88%A5ssd%E3%81%ABlinux%E3%82%92%E8%A4%87%E6%95%B0%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%8D%E3%82%8B%E6%A7%8B%E6%88%90%E3%81%AB%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">
+          既存のWindowsを残して別SSDにLinuxを複数インストールできる構成にしてみました
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/windows-11-%E3%81%8B%E3%82%89-zorin-os-18-1-%E3%81%AB%E5%BC%95%E3%81%A3%E8%B6%8A%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">
+          Windows 11 から Zorin OS 18.1 に引っ越してみました
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/git%E3%81%AE%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E3%81%AE%E8%A6%8F%E7%B4%84-%E7%AC%AC%EF%BC%92%E5%BC%BE/">
+          Gitのコミットメッセージの規約(第２弾)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB%E3%81%AE%E8%AA%BF%E6%9F%BB%E3%81%A8%E7%B4%B9%E4%BB%8B/">
+          変更履歴自動生成ツールの調査と紹介
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/githubstars%E4%B8%8A%E4%BD%8D5%E4%BB%B6%E3%81%AE%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%E3%81%AE%E6%83%85%E5%A0%B1%E6%95%B4%E7%90%86/">
+          GitHubStars上位5件の静的サイトジェネレーターの情報整理
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+<aside class="popular-tags-card">
+  <h2>
+    タグ(記事数降順)
+  </h2>
+  <ul class="fa-ul">
+    
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%96%E3%83%AD%E3%82%B0%E6%A7%8B%E7%AF%89">
+          ブログ構築 (6)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/github">
+          GitHub (4)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/git">
+          Git (3)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/githubpages">
+          GitHubPages (3)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/conventional-commits">
+          Conventional Commits (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/githubactions">
+          GitHubActions (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/jekyll">
+          Jekyll (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/linux">
+          Linux (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88">
+          コミット (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/grub">
+          GRUB (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/lighthouse">
+          Lighthouse (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/tortoisegit">
+          TortoiseGit (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/zorin-os">
+          Zorin OS (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%86%E3%83%BC%E3%83%9E%E6%94%B9%E8%89%AF">
+          テーマ改良 (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%83%96%E3%83%BC%E3%83%88">
+          デュアルブート (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%AA%E3%83%99%E3%83%BC%E3%82%B9">
+          リベース (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB">
+          変更履歴自動生成ツール (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E8%A9%95%E4%BE%A1%E3%83%84%E3%83%BC%E3%83%AB">
+          評価ツール (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC">
+          静的サイトジェネレーター (1)
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+  <aside class="toc-card">
+    <h2 id="toc">
+  目次
+</h2>
+
+<ul class="toc"><li><a href="#toc">
+  目次
+</a></li><li><a href="#1-初めに">1. 初めに</a></li><li><a href="#2-変更履歴自動生成ツールの一覧">2. 変更履歴自動生成ツールの一覧</a></li><li><a href="#3-変更履歴自動生成ツールの動作確認">3. 変更履歴自動生成ツールの動作確認</a><ul><li><a href="#31-no04-commitizen-toolscommitizen">3.1. No.04: <code class="language-plaintext highlighter-rouge">commitizen-tools/commitizen</code></a></li><li><a href="#32-no05-python-semantic-releasepython-semantic-release">3.2. No.05: <code class="language-plaintext highlighter-rouge">python-semantic-release/python-semantic-release</code></a></li><li><a href="#33-no01-conventional-changelogconventional-changelog-cli">3.3. No.01: <code class="language-plaintext highlighter-rouge">conventional-changelog/conventional-changelog-cli</code></a></li></ul></li><li><a href="#4-変更履歴自動生成ツールの仕様まとめ">4. 変更履歴自動生成ツールの仕様まとめ</a></li><li><a href="#5-最後に">5. 最後に</a></li><li><a href="#6-参考url">6. 参考URL</a><ul><li><a href="#61-commit-message-guidelines-by-angular">6.1. Commit Message Guidelines by Angular</a></li><li><a href="#62-conventional-commits">6.2. Conventional Commits</a></li><li><a href="#63-github-programming-language-ranking">6.3. GitHub Programming Language Ranking</a></li><li><a href="#64-conventional-changelog-cli">6.4. conventional-changelog-cli</a></li><li><a href="#65-github-changelog-generator">6.5. github-changelog-generator</a></li></ul></li></ul>
+
+  </aside>
+
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+  <div class="author">
+    <div class="container">
+      <p>&copy; 2021 Rem_</p>
+    </div>
+  </div>
+
+  <div class="page-top position-fixed">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <div class="nav-bottom fixed-bottom">
+    <div class="container">
+      <nav class="navbar navbar-expand">
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav justify-content-between">
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/">
+                <i class="fas fa-fw fa-home"></i>
+                <div>ホーム</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/posts/">
+                <i class="fas fa-fw fa-folder"></i>
+                <div>カテゴリ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="fas fa-fw fa-tag"></i>
+                <div>タグ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/archive/">
+                <i class="fas fa-fw fa-book"></i>
+                <div>アーカイブ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <div class="page-top">
+                <i class="fas fa-fw fa-arrow-up"></i>
+                <div>トップ</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</body>
+
+</html>

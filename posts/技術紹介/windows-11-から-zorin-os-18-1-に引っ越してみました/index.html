@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Windows 11 から Zorin OS 18.1 に引っ越してみました | Rem_Blog</title>
+
+  
+    <meta name="description" content="1. 始めに今までメインPCとしてWindowsを使用していましたが、Zorinに引っ越してみました。普段使いとしては大きな問題なく利用できていますが、GPUがNVIDIAの場合には注意が必要です。まずはキャプチャをお見せします。    Windowsの...">
+  
+
+  <link href="/blog/assets/img/favicon01.ico" rel="shortcut icon">
+  <link href="/blog/data/feed.xml" rel="alternate" type="application/rss+xml">
+
+  <script src="/blog/assets/lib/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="/blog/assets/lib/bootstrap-4.5.3/js/bootstrap.bundle.min.js"></script>
+  <script src="/blog/assets/lib/fontawesome-free-5.15.4/js/all.min.js"></script>
+  <script src="/blog/assets/lib/lightbox2-2.11.3/js/lightbox.min.js" defer></script>
+
+  <script src="/blog/assets/lib/lunr/lunr/lunr-2.3.9.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.stemmer.support.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/tinyseg.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.ja.js"></script>
+  <script src="/blog/assets/lib/lunr/lunr-languages/lunr.multi.js"></script>
+
+  <script src="/blog/assets/js/header.js"></script>
+  <script src="/blog/assets/js/search.js" defer></script>
+  
+
+  <link href="/blog/assets/lib/bootstrap-4.5.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/blog/assets/css/theme.css" rel="stylesheet">
+  <link href="/blog/assets/css/syntax-github.css" rel="stylesheet">
+  <link href="/blog/assets/lib/lightbox2-2.11.3/css/lightbox.min.css" rel="stylesheet">
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RJ0YRQH4CE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-RJ0YRQH4CE');
+  </script>
+
+
+</head>
+
+
+<body>
+  <header class="fixed-top">
+  <div class="nav-top">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg">
+        <a class="navbar-brand" href="/blog/">
+          Rem_Blog
+        </a>
+
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/blog/posts/"
+                id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>カテゴリ</span>
+              </a>
+              <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
+                
+                
+                  <a class="dropdown-item" href="/blog/posts/%E6%8A%80%E8%A1%93%E6%97%A5%E8%A8%98">
+                    技術日記 (3)
+                  </a>
+                
+                  <a class="dropdown-item" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B">
+                    技術紹介 (10)
+                  </a>
+                
+              </div>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="/blog/tags/"
+                id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-fw fa-tag"></i>
+                <span>タグ</span>
+              </a>
+              <div class="dropdown-menu mt-0" aria-labelledby="navbarDropdown">
+                
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/conventional-commits">
+                    Conventional Commits (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/git">
+                    Git (3)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/github">
+                    GitHub (4)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/githubactions">
+                    GitHubActions (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/githubpages">
+                    GitHubPages (3)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/grub">
+                    GRUB (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/jekyll">
+                    Jekyll (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/lighthouse">
+                    Lighthouse (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/linux">
+                    Linux (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/tortoisegit">
+                    TortoiseGit (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/zorin-os">
+                    Zorin OS (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88">
+                    コミット (2)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%86%E3%83%BC%E3%83%9E%E6%94%B9%E8%89%AF">
+                    テーマ改良 (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%83%96%E3%83%BC%E3%83%88">
+                    デュアルブート (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%96%E3%83%AD%E3%82%B0%E6%A7%8B%E7%AF%89">
+                    ブログ構築 (6)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E3%83%AA%E3%83%99%E3%83%BC%E3%82%B9">
+                    リベース (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB">
+                    変更履歴自動生成ツール (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E8%A9%95%E4%BE%A1%E3%83%84%E3%83%BC%E3%83%AB">
+                    評価ツール (1)
+                  </a>
+                
+                  
+                  <a class="dropdown-item" href="/blog/tags/%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC">
+                    静的サイトジェネレーター (1)
+                  </a>
+                
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/blog/archive/">
+                <i class="fas fa-fw fa-book"></i>
+                <span>アーカイブ</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <form method="get" id="search-form" action="/blog/search/">
+              <input type="search" id="search-query" name="search-query" class="form-control" placeholder="記事検索">
+            </form>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="top-card">
+            <span>主にIT技術について発信しますが、それ以外についても雑多に発信します</span>
+            <div class="top-image"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-9">
+          <aside class="page-navi-card">
+  <nav class="navbar navbar-expand">
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav">
+        
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                ホーム
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/posts/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                カテゴリ
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <a class="nav-link" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                技術紹介
+              </a>
+            
+          </li>
+        
+          <li class="nav-item">
+            
+              <span class="nav-link">
+                <i class="fas fa-fw fa-chevron-right"></i>
+                windows-11-から-zorin-os-18-1-に引っ越してみました
+              </span>
+            
+          </li>
+        
+      </ul>
+    </div>
+  </nav>
+</aside>
+
+
+<article class="post-card">
+  <h1>
+    <i class="fas fa-fw fa-newspaper"></i>Windows 11 から Zorin OS 18.1 に引っ越してみました
+  </h1>
+
+  
+
+
+
+
+
+
+<div class="post-meta">
+  <ul class="post-time">
+    <li>
+      <i class="fa fa-fw fa-calendar-alt"></i>
+      <span><time datetime="2026/05/05 20:00:00">2026/05/05 20:00:00</time></span>
+    </li>
+
+    
+  </ul>
+
+  
+    <ul class="post-log">
+      <li>
+        <i class="fas fa-fw fa-history"></i>
+        <a href="https://github.com/silverag-corgi/blog/commits/main/docs/_posts/2026-05-05-00012.md" target="_blank" rel="noopener">変更履歴 on GitHub</a>
+      </li>
+    </ul>
+  
+
+  <ul class="post-category">
+    
+      <li>
+        <i class="fas fa-fw fa-folder"></i>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B">
+          技術紹介
+        </a>
+      </li>
+    
+  </ul>
+
+  <ul class="post-tag">
+    
+      <li>
+        <i class="fas fa-fw fa-tag"></i>
+        
+        <a href="/blog/tags/linux">
+          Linux
+        </a>
+      </li>
+    
+      <li>
+        <i class="fas fa-fw fa-tag"></i>
+        
+        <a href="/blog/tags/zorin-os">
+          Zorin OS
+        </a>
+      </li>
+    
+  </ul>
+
+  
+    <ul class="post-reading-time">
+      <li>
+        <i class="fas fa-fw fa-book-reader"></i>
+        約14分
+      </li>
+    </ul>
+  
+</div>
+
+
+  
+    <p class="post-header-image">
+      <img src="/blog/assets_of_posts/00012/installing_os.png" alt="記事ヘッダ画像">
+    </p>
+  
+
+  <div class="post-content">
+    
+      <h2 id="toc">
+  目次
+</h2>
+
+<ul class="toc"><li><a href="#1-始めに">1. 始めに</a></li><li><a href="#2-想定する読者">2. 想定する読者</a></li><li><a href="#3-pc構成">3. PC構成</a></li><li><a href="#4-ウィンドウシステムでwaylandを選んだ理由">4. ウィンドウシステムでWaylandを選んだ理由</a></li><li><a href="#5-構築手順">5. 構築手順</a><ul><li><a href="#51-外観設定">5.1. 外観設定</a><ul><li><a href="#511-フォント-noto-sans-cjk--cascadia-code">5.1.1. フォント: Noto Sans CJK / Cascadia Code</a></li><li><a href="#512-テーマ-materia">5.1.2. テーマ: Materia</a></li><li><a href="#513-ディレクトリ-英語化">5.1.3. ディレクトリ: 英語化</a></li></ul></li><li><a href="#52-キーボード操作">5.2. キーボード操作</a><ul><li><a href="#521-標準のショートカット">5.2.1. 標準のショートカット</a></li><li><a href="#522-独自のショートカット">5.2.2. 独自のショートカット</a></li></ul></li><li><a href="#53-入出力デバイス接続">5.3. 入出力デバイス接続</a><ul><li><a href="#531-デバイス接続-bluetooth接続">5.3.1. デバイス接続: Bluetooth接続</a></li><li><a href="#532-マウス設定-solaar">5.3.2. マウス設定: Solaar</a></li></ul></li><li><a href="#54-システム管理保守">5.4. システム管理・保守</a><ul><li><a href="#541-システムモニター-mission-center">5.4.1. システムモニター: Mission Center</a></li><li><a href="#542-バックアップ-timeshift">5.4.2. バックアップ: Timeshift</a></li><li><a href="#543-ディスク管理-gparted">5.4.3. ディスク管理: GParted</a></li><li><a href="#544-セキュリティ-ファイアウォール">5.4.4. セキュリティ: ファイアウォール</a></li></ul></li><li><a href="#55-日常利用アプリ">5.5. 日常利用アプリ</a><ul><li><a href="#551-クリップボードマネージャ-gpaste">5.5.1. クリップボードマネージャ: GPaste</a></li><li><a href="#552-アーカイブマネージャ-file-roller標準">5.5.2. アーカイブマネージャ: File Roller（標準）</a></li><li><a href="#553-コミックビューア-mcomix">5.5.3. コミックビューア: MComix</a></li><li><a href="#554-動画再生-mpv">5.5.4. 動画再生: mpv</a></li><li><a href="#555-サムネイル生成-ffmpegthumbnailer">5.5.5. サムネイル生成: ffmpegthumbnailer</a></li><li><a href="#556-ブラウザ-chrome">5.5.6. ブラウザ: Chrome</a></li></ul></li><li><a href="#56-開発環境">5.6. 開発環境</a></li></ul></li><li><a href="#6-最後に">6. 最後に</a></li><li><a href="#7-参考url">7. 参考URL</a></li></ul>
+
+    
+
+    <h2 id="1-始めに">1. 始めに</h2>
+
+<p>今までメインPCとしてWindowsを使用していましたが、Zorinに引っ越してみました。普段使いとしては大きな問題なく利用できていますが、GPUがNVIDIAの場合には注意が必要です。まずはキャプチャをお見せします。</p>
+
+<p><a href="/blog/assets_of_posts/00012/spec.png" data-lightbox="group">  <img src="/blog/assets_of_posts/00012/spec.png" alt="os_details" /></a></p>
+
+<p><a href="/blog/assets_of_posts/00012/applications.png" data-lightbox="group">  <img src="/blog/assets_of_posts/00012/applications.png" alt="applications" /></a></p>
+
+<p>Windowsの主な不満としてWindowsUpdateが重いこと（累積更新）やメモリ消費が多いこと（常駐サービスや仮想化）がありました。そこでWindowsライクなUIを提供するLinuxとして知られているZorinをインストールしてみました。このOSはWindowsユーザがLinuxに移行しやすいように設計されたディストリビューションです。</p>
+
+<p>本記事では初期設定や普段使うアプリケーションについて紹介します。OS本体のインストール手順については画面に従って進めるだけなので割愛します。</p>
+
+<p>なお、自分は仕事やプライベートでCUIのUbuntuやDebianを使用しているのですが、デスクトップ環境はほぼ初心者です。そのため、通常のインストール作業自体の敷居は高くないと感じました。一方で、パーティションやブートローダの設定は初心者には難しいと感じたため、このあたりは<a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E6%97%A2%E5%AD%98%E3%81%AEwindows%E3%82%92%E6%AE%8B%E3%81%97%E3%81%A6%E5%88%A5ssd%E3%81%ABlinux%E3%82%92%E8%A4%87%E6%95%B0%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%8D%E3%82%8B%E6%A7%8B%E6%88%90%E3%81%AB%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">別の記事</a>で紹介する予定です。</p>
+
+<h2 id="2-想定する読者">2. 想定する読者</h2>
+
+<p>本記事は以下の読者を想定しています。</p>
+
+<ul>
+  <li>Windowsに不満がある方</li>
+  <li>Zorinに興味がある方</li>
+  <li>Zorinのおすすめアプリを知りたい方</li>
+</ul>
+
+<p>また、自分はWindowsを下記用途で使用しているのですが、似た用途であれば参考になると思います。</p>
+
+<ul>
+  <li>マルチモニタ（トリプル）</li>
+  <li>ブラウジング
+    <ul>
+      <li>Google系Webアプリ</li>
+      <li>Twitter</li>
+      <li>ChatGPT</li>
+      <li>YouTube</li>
+      <li>AbemaTV</li>
+      <li>Amazon</li>
+    </ul>
+  </li>
+  <li>開発
+    <ul>
+      <li>VSCode</li>
+      <li>Docker</li>
+    </ul>
+  </li>
+  <li>動画再生</li>
+  <li>漫画閲覧</li>
+</ul>
+
+<h2 id="3-pc構成">3. PC構成</h2>
+
+<p>元々Windowsをインストールしていたので、SSDを増設してデュアルブートでZorinをインストールしました。</p>
+
+<ul>
+  <li>OS:
+    <ul>
+      <li>Windows 11 Pro</li>
+      <li>Zorin OS 18.1 Core</li>
+    </ul>
+  </li>
+  <li>CPU: Intel i7-8700 (12) @ 4.600GHz</li>
+  <li>GPU: NVIDIA GeForce RTX 4060</li>
+  <li>SSD:
+    <ul>
+      <li>SATA: 480GB (Windows用)</li>
+      <li>M.2 NVMe: 512GB (Linux用)</li>
+    </ul>
+  </li>
+  <li>Memory: 16GB</li>
+  <li>Monitor: FHD x 3</li>
+</ul>
+
+<h2 id="4-ウィンドウシステムでwaylandを選んだ理由">4. ウィンドウシステムでWaylandを選んだ理由</h2>
+
+<p>ログイン時にWaylandを選択します。</p>
+
+<p>ZorinにはウィンドウシステムとしてWaylandとX11の2種類ありますが、Waylandを選択します。Chrome（TwitterやChatGPTなど）での描画効率が良いこと、入力遅延がほぼないことが理由です。ただし、GPUがNVIDIAなので環境によっては不安定になる可能性があること、一部アプリがWaylandに非対応であることには注意が必要です。</p>
+
+<h2 id="5-構築手順">5. 構築手順</h2>
+
+<p>この章では外観設定、キーボード操作、入出力デバイス接続、システム管理・保守、日常利用アプリ、開発環境の順に紹介します。</p>
+
+<h3 id="51-外観設定">5.1. 外観設定</h3>
+
+<h4 id="511-フォント-noto-sans-cjk--cascadia-code">5.1.1. フォント: Noto Sans CJK / Cascadia Code</h4>
+
+<p>メニューやドキュメントの表示に適した日本語フォントと、コードやターミナルの表示に適したフォントをインストールしました。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>fonts-noto fonts-noto-cjk fonts-cascadia-code
+</code></pre></div></div>
+
+<p>設定操作:</p>
+
+<ul>
+  <li>Zorin Appearance ＞ フォント</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>設定値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>インターフェース</td>
+      <td>Noto Sans CJK JP Regular</td>
+    </tr>
+    <tr>
+      <td>等幅</td>
+      <td>Cascadia Code Roman</td>
+    </tr>
+    <tr>
+      <td>ドキュメント</td>
+      <td>Noto Sans CJK JP Regular</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="512-テーマ-materia">5.1.2. テーマ: Materia</h4>
+
+<p>標準のダークテーマだと暗すぎる（非アクティブ時の画面が見づらい）ので、ダークテーマの中でも少し明るいテーマをインストールしました。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>materia-gtk-theme
+</code></pre></div></div>
+
+<p>設定操作:</p>
+
+<ul>
+  <li>Zorin Appearance ＞ テーマ ＞ その他</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>設定値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>アプリケーション</td>
+      <td>Materia-dark</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="513-ディレクトリ-英語化">5.1.3. ディレクトリ: 英語化</h4>
+
+<p>標準だとユーザホームのディレクトリ名が日本語（例: ドキュメント）になっているため、英語化しました。主にCUI環境での操作性向上が見込めます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">LANG</span><span class="o">=</span>C xdg-user-dirs-gtk-update
+<span class="nb">rm</span> <span class="nt">-rf</span> ~/.cache/<span class="k">*</span>
+</code></pre></div></div>
+
+<p>実施内容:</p>
+
+<ul>
+  <li>和名の旧フォルダ削除</li>
+  <li>再ログイン（GNOMEセッション更新）</li>
+</ul>
+
+<p>懸念事項:</p>
+
+<p>この対応によりログイン時のシェル起動に失敗する可能性があります。それにより、再度パスワードを入力する必要があるかもしれません。</p>
+
+<h3 id="52-キーボード操作">5.2. キーボード操作</h3>
+
+<h4 id="521-標準のショートカット">5.2.1. 標準のショートカット</h4>
+
+<p>設定操作:</p>
+
+<ul>
+  <li>設定 ＞ キーボード ＞ キーボードショートカット</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>キー</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>ウィンドウ ＞ ウィンドウを最大化する</td>
+      <td>無効</td>
+    </tr>
+    <tr>
+      <td>ウィンドウ ＞ ウィンドウを戻す</td>
+      <td>無効</td>
+    </tr>
+    <tr>
+      <td>ウィンドウ ＞ 画面右半分に表示する</td>
+      <td>無効</td>
+    </tr>
+    <tr>
+      <td>ウィンドウ ＞ 画面左半分に表示する</td>
+      <td>無効</td>
+    </tr>
+    <tr>
+      <td>システム ＞ 通知リストを表示する</td>
+      <td>無効</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="522-独自のショートカット">5.2.2. 独自のショートカット</h4>
+
+<p>後続の「クリップボード: GPaste」でインストールするアプリのショートカット設定です。Windowsのショートカットと似た挙動を実現させます。</p>
+
+<p>設定操作:</p>
+
+<ul>
+  <li>設定 ＞ キーボード ＞ キーボードショートカット ＞ 独自のショートカット</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>名前</th>
+      <th>コマンド</th>
+      <th>キー</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPaste</td>
+      <td>gpaste-client ui</td>
+      <td>Super+V</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="53-入出力デバイス接続">5.3. 入出力デバイス接続</h3>
+
+<h4 id="531-デバイス接続-bluetooth接続">5.3.1. デバイス接続: Bluetooth接続</h4>
+
+<p>PCにBluetoothレシーバーをUSB接続していましたので、Bluetooth接続を有効にしました。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bluetoothctl
+power on
+agent on <span class="c"># デバイスからのペアリングリクエストを受信するため、エージェントを起動</span>
+default-agent <span class="c"># デフォルトのエージェントを有効にし、ペアリング時の認証（Passkeyの入力など）を自動化</span>
+</code></pre></div></div>
+
+<h4 id="532-マウス設定-solaar">5.3.2. マウス設定: Solaar</h4>
+
+<p>LogiのBoltやUnifyingレシーバーでデバイスを接続しているため、Windowsでは専用の管理アプリ（Logi Options+）を使用していましたが、Linuxでは提供されていないため、代替アプリをインストールしました。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>solaar
+</code></pre></div></div>
+
+<h3 id="54-システム管理保守">5.4. システム管理・保守</h3>
+
+<h4 id="541-システムモニター-mission-center">5.4.1. システムモニター: Mission Center</h4>
+
+<p>システムモニターはGNOME標準のアプリがありますが、より詳細な情報を表示できるアプリをインストールしました。GNOME標準のアプリでは提供されていないのですが、GPUの使用率や温度を表示できます。</p>
+
+<p>なお、aptやsnapでは提供されていないため、flatpakでインストールしました。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>flatpak <span class="nb">install </span>flathub io.missioncenter.MissionCenter
+</code></pre></div></div>
+
+<h4 id="542-バックアップ-timeshift">5.4.2. バックアップ: Timeshift</h4>
+
+<p>バックアップはGNOME標準のアプリがありますが、システムの状態を定期的に保存して、必要に応じて復元できるアプリをインストールしました。GNOME標準のアプリより、システム更新や設定変更によるトラブルから復旧しやすいです。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>timeshift
+</code></pre></div></div>
+
+<h4 id="543-ディスク管理-gparted">5.4.3. ディスク管理: GParted</h4>
+
+<p>ディスク管理はGNOME標準のアプリがありますが、パーティションの編集に特化したアプリをインストールしました。GNOME標準のアプリより、パーティションの作成・削除・リサイズやファイルシステムの変更などの一般的な操作を細かく柔軟に行えます。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>gparted
+</code></pre></div></div>
+
+<h4 id="544-セキュリティ-ファイアウォール">5.4.4. セキュリティ: ファイアウォール</h4>
+
+<p>インストールはされていますが、デフォルトでは無効になっているため、有効にします。</p>
+
+<p>設定操作:</p>
+
+<ul>
+  <li>ファイアウォール設定ツール</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>設定値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Status</td>
+      <td>ON</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="55-日常利用アプリ">5.5. 日常利用アプリ</h3>
+
+<h4 id="551-クリップボードマネージャ-gpaste">5.5.1. クリップボードマネージャ: GPaste</h4>
+
+<p>GNOME標準のクリップボードマネージャは履歴を保存できないため、履歴を保存できるアプリをインストールしました。なお、GNOMEシェル拡張（GPaste）をインストールすることで、ログイン時に自動起動されますが、インストール後はログオフ＆ログインが必要です。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>gpaste-2
+<span class="nb">sudo </span>apt <span class="nb">install </span>gnome-shell-extension-gpaste
+</code></pre></div></div>
+
+<p>設定操作:</p>
+
+<ul>
+  <li>GPaste の設定 ＞ 挙動全般</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>設定値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GNOME shell 拡張機能を有効化する</td>
+      <td>ON</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="552-アーカイブマネージャ-file-roller標準">5.5.2. アーカイブマネージャ: File Roller（標準）</h4>
+
+<p>GNOME標準のアーカイブマネージャは一般的な圧縮・解凍の操作を行うのに十分な機能を提供しているため、特に追加のアプリはインストールしません。</p>
+
+<h4 id="553-コミックビューア-mcomix">5.5.3. コミックビューア: MComix</h4>
+
+<p>WindowsではHoneyviewを使用していましたが、Linuxでは提供されていないため、代替アプリをインストールしました。紙の漫画のように読めるアプリとしては有力な選択肢だと思います。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>mcomix
+</code></pre></div></div>
+
+<p>設定操作:</p>
+
+<ul>
+  <li>表示</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>項目</th>
+      <th>設定値</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>見開き表示</td>
+      <td>ON</td>
+    </tr>
+    <tr>
+      <td>漫画のページ順に表示</td>
+      <td>ON</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="554-動画再生-mpv">5.5.4. 動画再生: mpv</h4>
+
+<p>WindowsではMPC-HCもしくはMPC-BEを使用していましたが、Linuxでは提供されていないため、代替アプリをインストールしました。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>mpv
+</code></pre></div></div>
+
+<p>動作は非常に軽くて使いやすいのですが、このアプリ単体だとGUIによる操作がほとんど提供されていないため、プレイリスト管理、ABリピート、シークバーでのサムネ表示などはスクリプトを別途実装もしくは導入する必要があります。下記自作リポジトリのスクリプトを導入して、上記の機能を実現しています。</p>
+
+<ul>
+  <li><a href="https://github.com/silverag-corgi/mpv-config">https://github.com/silverag-corgi/mpv-config</a></li>
+</ul>
+
+<h4 id="555-サムネイル生成-ffmpegthumbnailer">5.5.5. サムネイル生成: ffmpegthumbnailer</h4>
+
+<p>ファイルマネージャーで動画ファイルのサムネイルを表示するアプリをインストールしました。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>apt <span class="nb">install </span>ffmpegthumbnailer
+</code></pre></div></div>
+
+<h4 id="556-ブラウザ-chrome">5.5.6. ブラウザ: Chrome</h4>
+
+<p>ブラウザはFirefoxがインストールされていますが、設定を同期したいので普段使用しているアプリをインストールしました。</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+<span class="nb">sudo </span>apt <span class="nb">install</span> ./google-chrome-stable_current_amd64.deb
+<span class="nb">sudo </span>apt update
+<span class="nb">sudo </span>apt <span class="nb">install </span>google-chrome-stable
+</code></pre></div></div>
+
+<p>拡張機能:</p>
+
+<ul>
+  <li>AutoScroll（自動スクロール）
+    <ul>
+      <li>Solaarではホイールクリックに割り当て不可能</li>
+    </ul>
+  </li>
+  <li>crxMouse（マウスジェスチャー）</li>
+</ul>
+
+<h3 id="56-開発環境">5.6. 開発環境</h3>
+
+<p>VSCode、Git、DockerCLIをインストールしました。いずれも一般的な構成であり、Zorin固有の設定はないため、詳細な導入手順は公式ドキュメントを参照してください。</p>
+
+<h2 id="6-最後に">6. 最後に</h2>
+
+<p>本記事ではWindowsからZorinに引っ越してみた際の初期設定や普段使うアプリケーションを紹介しました。2週間ほど運用した範囲ではマルチモニタ（トリプル）、ブラウジング、開発、動画再生、漫画閲覧といった用途については、大きな問題なく利用できています。</p>
+
+<p>特にWindowsに近い操作感を保ったままLinuxのデスクトップ環境へ移行しやすい点はZorinの大きな利点だと感じました。また、フォント、テーマ、ショートカット、クリップボード管理、各種日常利用アプリを整備することで、実用的なデスクトップ環境を構築できました。</p>
+
+<p>一方でWaylandとNVIDIAは環境によっては不安定になる可能性があるため、個別調整が必要になる可能性があります。そのため、インストールしてすぐ使いたい場合は有力な選択肢ですが、GPUの安定性を重視する場合は他のディストリビューションと比較・検討した方が良いと思います。</p>
+
+<p>今後、自分に合ったデスクトップ環境を探していきたいですね。</p>
+
+<h2 id="7-参考url">7. 参考URL</h2>
+
+<ul>
+  <li><a href="https://blog.zorin.com/2026/04/15/zorin-os-18.1-is-released/">Zorin OS - Make your computer better.</a></li>
+</ul>
+
+
+    
+  <div class="share-bar">
+    <ul class="share-buttons">
+      
+        <li class="share-twitter">
+          <a href="https://twitter.com/intent/tweet?text=Windows+11+%E3%81%8B%E3%82%89+Zorin+OS+18.1+%E3%81%AB%E5%BC%95%E3%81%A3%E8%B6%8A%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F+%7C+Rem_Blog%0ahttps://silverag-corgi.github.io/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/windows-11-%E3%81%8B%E3%82%89-zorin-os-18-1-%E3%81%AB%E5%BC%95%E3%81%A3%E8%B6%8A%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/" target="_blank" rel="noopener" title="Tweet">
+            <i class="fab fa-fw fa-2x fa-twitter-square"></i>
+          </a>
+        </li>
+      
+
+      
+        <li class="share-line">
+          <a href="https://social-plugins.line.me/lineit/share?url=https://silverag-corgi.github.io/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/windows-11-%E3%81%8B%E3%82%89-zorin-os-18-1-%E3%81%AB%E5%BC%95%E3%81%A3%E8%B6%8A%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/" target="_blank" rel="noopener" title="Tweet">
+            <i class="fab fa-fw fa-2x fa-line"></i>
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+  </div>
+</article>
+
+<aside class="post-navi-card">
+  <ul class="pagination justify-content-around">
+    
+      
+        <li class="page-item col-lg-6">
+          <a class="page-link" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/git%E3%81%AE%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E3%81%AE%E8%A6%8F%E7%B4%84-%E7%AC%AC%EF%BC%92%E5%BC%BE/">Gitのコミットメッセージの規約(第２弾)</a>
+        </li>
+      
+
+      
+        <li class="page-item col-lg-6">
+          <a class="page-link" href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E6%97%A2%E5%AD%98%E3%81%AEwindows%E3%82%92%E6%AE%8B%E3%81%97%E3%81%A6%E5%88%A5ssd%E3%81%ABlinux%E3%82%92%E8%A4%87%E6%95%B0%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%8D%E3%82%8B%E6%A7%8B%E6%88%90%E3%81%AB%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">既存のWindowsを残して別SSDにLinuxを複数インストールできる構成にしてみました</a>
+        </li>
+      
+    
+  </ul>
+</aside>
+
+        </div>
+
+        <div class="col-lg-3">
+          <aside class="profile-card">
+  <h2>
+    プロフィール
+  </h2>
+  <p class="user-image">
+    <a class="nav-link" href="/blog/about/">
+      <img src="/blog/assets/img/dog61_icon.jpg" alt="ユーザ画像" />
+    </a>
+  </p>
+  <p>
+    Webエンジニア(バックエンド)です。 アイコンからわかる通り、犬が好きです。
+  </p>
+  <ul class="social-media">
+  
+    <li>
+      <a title="silverag-corgi on Github" href="https://github.com/silverag-corgi" target="_blank" rel="noopener"><i class="fab fa-github fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="silverag_corgi on Twitter" href="https://twitter.com/silverag_corgi" target="_blank" rel="noopener"><i class="fab fa-twitter fa-2x"></i></a>
+    </li>
+  
+
+  
+    <li>
+      <a title="/data/feed.xml RSS" href="/blog/data/feed.xml" target="_blank" rel="noopener"><i class="fas fa-fw fa-rss fa-2x"></i></a>
+    </li>
+  
+</ul>
+
+</aside>
+
+<aside class="recent-posts-card">
+  <h2>
+    最近の記事
+  </h2>
+  <ul class="fa-ul">
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E6%97%A2%E5%AD%98%E3%81%AEwindows%E3%82%92%E6%AE%8B%E3%81%97%E3%81%A6%E5%88%A5ssd%E3%81%ABlinux%E3%82%92%E8%A4%87%E6%95%B0%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%A7%E3%81%8D%E3%82%8B%E6%A7%8B%E6%88%90%E3%81%AB%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">
+          既存のWindowsを残して別SSDにLinuxを複数インストールできる構成にしてみました
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/windows-11-%E3%81%8B%E3%82%89-zorin-os-18-1-%E3%81%AB%E5%BC%95%E3%81%A3%E8%B6%8A%E3%81%97%E3%81%A6%E3%81%BF%E3%81%BE%E3%81%97%E3%81%9F/">
+          Windows 11 から Zorin OS 18.1 に引っ越してみました
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/git%E3%81%AE%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88%E3%83%A1%E3%83%83%E3%82%BB%E3%83%BC%E3%82%B8%E3%81%AE%E8%A6%8F%E7%B4%84-%E7%AC%AC%EF%BC%92%E5%BC%BE/">
+          Gitのコミットメッセージの規約(第２弾)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB%E3%81%AE%E8%AA%BF%E6%9F%BB%E3%81%A8%E7%B4%B9%E4%BB%8B/">
+          変更履歴自動生成ツールの調査と紹介
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-newspaper"></i></span>
+        <a href="/blog/posts/%E6%8A%80%E8%A1%93%E7%B4%B9%E4%BB%8B/githubstars%E4%B8%8A%E4%BD%8D5%E4%BB%B6%E3%81%AE%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC%E3%81%AE%E6%83%85%E5%A0%B1%E6%95%B4%E7%90%86/">
+          GitHubStars上位5件の静的サイトジェネレーターの情報整理
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+<aside class="popular-tags-card">
+  <h2>
+    タグ(記事数降順)
+  </h2>
+  <ul class="fa-ul">
+    
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%96%E3%83%AD%E3%82%B0%E6%A7%8B%E7%AF%89">
+          ブログ構築 (6)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/github">
+          GitHub (4)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/git">
+          Git (3)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/githubpages">
+          GitHubPages (3)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/conventional-commits">
+          Conventional Commits (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/githubactions">
+          GitHubActions (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/jekyll">
+          Jekyll (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/linux">
+          Linux (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%82%B3%E3%83%9F%E3%83%83%E3%83%88">
+          コミット (2)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/grub">
+          GRUB (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/lighthouse">
+          Lighthouse (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/tortoisegit">
+          TortoiseGit (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/zorin-os">
+          Zorin OS (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%86%E3%83%BC%E3%83%9E%E6%94%B9%E8%89%AF">
+          テーマ改良 (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%87%E3%83%A5%E3%82%A2%E3%83%AB%E3%83%96%E3%83%BC%E3%83%88">
+          デュアルブート (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E3%83%AA%E3%83%99%E3%83%BC%E3%82%B9">
+          リベース (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E5%A4%89%E6%9B%B4%E5%B1%A5%E6%AD%B4%E8%87%AA%E5%8B%95%E7%94%9F%E6%88%90%E3%83%84%E3%83%BC%E3%83%AB">
+          変更履歴自動生成ツール (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E8%A9%95%E4%BE%A1%E3%83%84%E3%83%BC%E3%83%AB">
+          評価ツール (1)
+        </a>
+      </li>
+    
+      <li>
+        <span class="fa-li"><i class="fas fa-fw fa-tag"></i></span>
+        
+        <a href="/blog/tags/%E9%9D%99%E7%9A%84%E3%82%B5%E3%82%A4%E3%83%88%E3%82%B8%E3%82%A7%E3%83%8D%E3%83%AC%E3%83%BC%E3%82%BF%E3%83%BC">
+          静的サイトジェネレーター (1)
+        </a>
+      </li>
+    
+  </ul>
+</aside>
+
+
+  <aside class="toc-card">
+    <h2 id="toc">
+  目次
+</h2>
+
+<ul class="toc"><li><a href="#toc">
+  目次
+</a></li><li><a href="#1-始めに">1. 始めに</a></li><li><a href="#2-想定する読者">2. 想定する読者</a></li><li><a href="#3-pc構成">3. PC構成</a></li><li><a href="#4-ウィンドウシステムでwaylandを選んだ理由">4. ウィンドウシステムでWaylandを選んだ理由</a></li><li><a href="#5-構築手順">5. 構築手順</a><ul><li><a href="#51-外観設定">5.1. 外観設定</a></li><li><a href="#52-キーボード操作">5.2. キーボード操作</a></li><li><a href="#53-入出力デバイス接続">5.3. 入出力デバイス接続</a></li><li><a href="#54-システム管理保守">5.4. システム管理・保守</a></li><li><a href="#55-日常利用アプリ">5.5. 日常利用アプリ</a></li><li><a href="#56-開発環境">5.6. 開発環境</a></li></ul></li><li><a href="#6-最後に">6. 最後に</a></li><li><a href="#7-参考url">7. 参考URL</a></li></ul>
+
+  </aside>
+
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+  <div class="author">
+    <div class="container">
+      <p>&copy; 2021 Rem_</p>
+    </div>
+  </div>
+
+  <div class="page-top position-fixed">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <div class="nav-bottom fixed-bottom">
+    <div class="container">
+      <nav class="navbar navbar-expand">
+        <div class="collapse navbar-collapse">
+          <ul class="navbar-nav justify-content-between">
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/">
+                <i class="fas fa-fw fa-home"></i>
+                <div>ホーム</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/posts/">
+                <i class="fas fa-fw fa-folder"></i>
+                <div>カテゴリ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/tags/">
+                <i class="fas fa-fw fa-tag"></i>
+                <div>タグ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <a class="nav-link" href="/blog/archive/">
+                <i class="fas fa-fw fa-book"></i>
+                <div>アーカイブ</div>
+              </a>
+            </li>
+            <li class="nav-item nav-bottom-icon d-table-cell text-center align-middle">
+              <div class="page-top">
+                <i class="fas fa-fw fa-arrow-up"></i>
+                <div>トップ</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</body>
+
+</html>
